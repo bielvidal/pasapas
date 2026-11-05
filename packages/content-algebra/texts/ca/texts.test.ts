@@ -1,5 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { BLOCS, TAGS, fill } from "./index";
+import {
+  B1_TEXTS,
+  B2_TEXTS,
+  B3_TEXTS,
+  B4_TEXTS,
+  B5_TEXTS,
+  B6_TEXTS,
+  B7_TEXTS,
+  BLOCS,
+  TAGS,
+  fill,
+} from "./index";
+
+function strings(v: unknown): string[] {
+  if (typeof v === "string") return [v];
+  if (v && typeof v === "object") return Object.values(v).flatMap(strings);
+  return [];
+}
+const BLOCK_TEXTS = [B1_TEXTS, B2_TEXTS, B3_TEXTS, B4_TEXTS, B5_TEXTS, B6_TEXTS, B7_TEXTS];
 
 describe("textos", () => {
   it("fill substitueix i avisa si falta un paràmetre", () => {
@@ -19,11 +37,19 @@ describe("textos", () => {
     const all = [
       ...Object.values(TAGS).flatMap((t) => [t.nom, t.explicacio]),
       ...BLOCS.map((b) => b.reglaOr),
+      ...BLOCK_TEXTS.flatMap(strings),
     ];
     for (const s of all) expect((s.match(/\$/g) ?? []).length % 2, s).toBe(0);
   });
-  it("hi ha 7 blocs i només B5 està disponible", () => {
+  it("hi ha 7 blocs i tots estan disponibles", () => {
     expect(BLOCS.map((b) => b.id)).toEqual(["B1", "B2", "B3", "B4", "B5", "B6", "B7"]);
-    expect(BLOCS.filter((b) => b.disponible).map((b) => b.id)).toEqual(["B5"]);
+    expect(BLOCS.every((b) => b.disponible)).toBe(true);
+  });
+  it("tots els paràmetres [[...]] dels textos es poden omplir", () => {
+    for (const s of BLOCK_TEXTS.flatMap(strings)) {
+      const names = [...s.matchAll(/\[\[(\w+)\]\]/g)].map((m) => m[1]!);
+      const filled = fill(s, Object.fromEntries(names.map((n) => [n, 1])));
+      expect(filled, s).not.toMatch(/\[\[\w+\]\]/);
+    }
   });
 });

@@ -108,6 +108,49 @@ eliminados, PPER restaurado por Biel con `docker compose up -d --build` en su ca
 dictarle el código; (opcional) `.claude/settings.json` con `docker compose`, `scripts/test-py.sh`…
 **Siguiente sesión:** feedback con sync real entre móvil y PC; fase 3 (bloques, D20).
 
+## S3 · 2026-11-06 (madrugada) · Fase 3: los seis bloques restantes
+
+Biel: «adelante con todos los bloques en el orden que prefieras, no pares hasta tenerlos todos, ya
+revisaremos después». Hecho B1, B2, B3, B4, B6 y B7 (39 plantillas nuevas; 48 en total) siguiendo
+el catálogo, con textos en catalán en `texts/ca/B{1,2,3,4,6,7}.ts` + `comu.ts` (pendientes de
+revisión de Biel).
+
+**Motor de verificación ampliado (exacto, sin coma flotante):** `Mono` (monomios con exponentes
+racionales, B3), `solve.ts` (raíces racionales por el teorema de la raíz racional, conjuntos
+solución con residuo sin raíces racionales, ecuaciones racionales y radicales `√(x+a) = x−b`),
+formas máquina nuevas en `machine.ts` (`mono`, `sqrtpoly`, `eq`, `radeq`, `sol`, claims
+`no_factoritza` y `wrong_form`) y `machineEquals` genérico en `verify.ts`. `valid_step` de
+ecuaciones = mismo conjunto de soluciones (convención del catálogo). Tests: 197 en contenido (500
+semillas por plantilla; pasan también con 2000), KaTeX estricto sobre 50 semillas de cada plantilla
+sin errores, 247 TS en total.
+
+**Decisiones de implementación (desviaciones del catálogo, a confirmar por Biel):**
+
+- B2.T4: errata del catálogo en el distractor de `B2_INVERTEIX_PRIMERA` para la segunda variante:
+  se usa `c/(ab)` (invertir la fracción equivocada en `a/(b/c)`); en la primera, `b/(ac)`.
+- B3.T4: `a` y `b` coprimos además de distintos (si no, la fracción se mostraba ya reducida).
+- B3.T5: el pool usa `(x + k)²` en lugar de `(x + y)²` (una sola variable: verificación exacta con
+  polinomios); `√(x² + k²)` y `√(k²x²)` son dos entradas separadas (§5.2 del informe).
+- B4.T2 «nivel 1-2» son dos plantillas: `B4.T2` (nivel 1, a = 1, con «No es pot factoritzar») y
+  `B4.T2b` (nivel 2, a ∈ [2..4]).
+- B4.T5: el error `B4_FACTOR_COMU_INCOMPLET` (`g·x(x² − g·k²)`) solo continúa de forma coherente si
+  `g·k²` es cuadrado, así que en esa variante g = 4 y el paso siguiente es `4x(x + 2k)(x − 2k)`.
+- B5.T3 se deja como en el catálogo (distractor `x² − s·k`); decisión pendiente de Biel (D21).
+- B6.T5 y B7.T3 (`valid_step` de ecuaciones) se generalizan con parámetros como pide el catálogo y
+  se vuelve a sortear si la variante «inválida» resultara equivalente (lo exige el verificador).
+- B7.T5 (`next_step` de `√(x+a) = x−b`): la forma máquina del enunciado es la ecuación ya elevada
+  al cuadrado (el paso correcto no es equivalente al original: introduce la raíz falsa); el
+  distractor `√x + √a = x − b` es `claim:wrong_form` (incorrecto por construcción).
+- `find_error` de B7.T7: cuando el error es «dividir por x», la resolución tiene 3 pasos (si no,
+  dos pasos se mostrarían iguales).
+- Tags repetidos entre distractores (B1.T3, B2.T3, B3.T7, B7.T6…): permitidos, como ya dijo el
+  informe; el panel cuenta una elección por intento.
+
+**Pendiente:** Biel revisa los textos nuevos (`packages/content-algebra/texts/ca/`), decide B5.T3
+(D21) y confirma las desviaciones; `sudo systemctl restart pasapas-web` para publicar (build hecho,
+web 0.3.0, contenido 0.2.0). Corregir el catálogo (`02_CATALOGO_CONTENIDO.md`) con estas
+decisiones cuando Biel las valide.
+
 **Pendiente histórico de S1:**
 
 1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).

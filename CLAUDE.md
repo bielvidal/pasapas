@@ -53,10 +53,13 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
   (`buildItem`: regenera amb llavor derivada si dues opcions coincideixen, màx. 20; `grade`),
   `mastery.ts` (domini per bloc: últims 12 intents; per tag: 4 últimes presentacions), `leitner.ts`
   (caixes per `(template, error_tag)`, 1/3/7/14 dies), `selection.ts` (ronda 70/20/10).
-- `packages/content-algebra` — `src/math/` (racionals BigInt, polinomis, funcions racionals, `fmt`
-  LaTeX), `src/blocks/B5/templates.ts` (9 plantilles), `src/verify.ts` (verificació **exacta**: cap
-  tolerància), `texts/ca/` (textos). `CONTENT_VERSION` a `src/index.ts`: pujar-la quan canviï
-  qualsevol plantilla o text.
+- `packages/content-algebra` — `src/math/` (racionals BigInt, polinomis, funcions racionals,
+  monomis amb exponents racionals `Mono`, `solve.ts` (arrels racionals i conjunts solució exactes),
+  `fmt` LaTeX), `src/machine.ts` (formes màquina: `rf`, `mono`, `sqrtpoly`, `eq`, `radeq`, `sol`,
+  `claim`), `src/blocks/B{1..7}/templates.ts` (48 plantilles; `common.ts` utilitats, `blockTests.ts`
+  tests compartits), `src/verify.ts` (verificació **exacta** amb `machineEquals`: cap tolerància;
+  equacions = mateix conjunt de solucions), `texts/ca/` (textos per bloc + `comu.ts`).
+  `CONTENT_VERSION` a `src/index.ts`: pujar-la quan canviï qualsevol plantilla o text.
 - `apps/web` — Next 16 (App Router, tot `"use client"`: local-first, sense SSR de dades). `lib/db.ts`
   (Dexie: `attempts`, `sessions`), `lib/round.ts` (lògica de ronda, testable), `components/Ronda.tsx`
   (pregunta → explicació → resum), `components/Math.tsx` (KaTeX local + `MixedText` per a `$…$` i
@@ -101,8 +104,12 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
    canvia la generació), `block`, `type`, `level`, `generate(rng)` que retorna l'esborrany amb
    `promptMachine` i opcions `optRF` / `optNoSimplifica` / `optReason` (porten `machine` i `key`).
    Mai `Math.random`. Paràmetres amb `rng.int`; evitar casos degenerats a la pròpia plantilla.
-4. Afegir-la a la llista del bloc: el test `templates.test.ts` la recull sol (500 llavors, verificació
-   exacta, reproduïbilitat, variació) i el test de cobertura exigeix que tots els tags del bloc surtin.
+4. Afegir-la a la llista del bloc: `templates.test.ts` (via `describeBlock`) la recull sol (500
+   llavors, verificació exacta, reproduïbilitat, variació) i el test de cobertura exigeix que tots
+   els tags del bloc surtin. Formes màquina: `optRF` (polinomis/fraccions/números), `opt` amb
+   `monoMachine`/`eqMachine`/`solMachine`, `optText` per a claims; a `find_error`, `findErrorOptions`.
+   Si una variant «invàlida» pot ser equivalent per a alguns paràmetres, torna a sortejar dins de
+   `generate` (B6.T5, B7.T3). Els passos d'un `find_error` no poden mostrar-se iguals.
 5. `npm run check`. Pujar `CONTENT_VERSION`.
 
 ## Estat
@@ -110,6 +117,8 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
 Fase 1 (prototip) construïda i desplegada el 2026-11-05 a `https://pasapas.nereidlabs.net` (unit
 `pasapas-web`, hostname al túnel); validada per Biel i l'alumna. Fase 2 construïda la mateixa nit:
 API + login + administració + sincronització + pell de PPER (compose aixecat, smoke end-to-end i
-còpia verificada). Pendent de Biel: regla `api` → :8900 al túnel, restart de la unit, cron de la
-còpia, convidar l'alumna. Fase 3: blocs B3, B7, B1, B2, B4, B6 (ordre segons feedback, D20).
+còpia verificada). Fase 3 (2026-11-06): els 7 blocs complets
+(48 plantilles, 197 tests de contingut). Pendent de Biel: revisar els textos nous, D21 (B5.T3) i les
+desviacions del catàleg (REGISTRO S3), i publicar (`sudo systemctl restart pasapas-web`). Fase 4:
+panell ampliat i `content_overrides`; més `next_step` i un segon `find_error` per bloc.
 Diari de sessions a `docs/REGISTRO.md`.

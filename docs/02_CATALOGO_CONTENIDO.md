@@ -537,4 +537,9 @@
 | B6 | 6 | 3 | 1 | 1 | 1 | 7 |
 | B7 | 7 | 4 | 1 | 1 | 1 | 9 |
 
-**Pendent de contingut (fase 3, no bloqueja):** més `next_step` a B1, B2, B3 i B5; un segon `find_error` per bloc. Proposar-los amb el mateix format quan el motor estigui fet.
+**Estado de implementación (2026-11-06):** los 7 bloques están implementados en
+`packages/content-algebra/src/blocks/`. Las desviaciones respecto a este documento (B2.T4, B3.T4,
+B3.T5, B4.T2/T2b, B4.T5, B7.T5, B7.T7) están listadas en `REGISTRO.md` S3 y pendientes de que Biel
+las confirme (D22); entonces se corrige aquí.
+
+**Pendent de contingut (fase 4, no bloqueja):** més `next_step` a B1, B2, B3 i B5; un segon `find_error` per bloc. Proposar-los amb el mateix format quan el motor estigui fet.

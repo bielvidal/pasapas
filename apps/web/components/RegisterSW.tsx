@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import { BLOCS } from "@/lib/content";
 
 /** Registra el service worker (generat per Workbox al build) i escalfa la caché de les rutes. */
 export function RegisterSW() {
@@ -10,9 +11,16 @@ export function RegisterSW() {
       .then(async () => {
         // Primera visita: demana les pantalles perquè quedin a la caché i l'app vagi offline.
         await Promise.allSettled(
-          ["/", "/bloc/B5", "/practica/B5", "/repas", "/progres", "/compte"].map((u) =>
-            fetch(u, { cache: "no-store" }),
-          ),
+          [
+            "/",
+            "/repas",
+            "/progres",
+            "/compte",
+            ...BLOCS.filter((b) => b.disponible).flatMap((b) => [
+              `/bloc/${b.id}`,
+              `/practica/${b.id}`,
+            ]),
+          ].map((u) => fetch(u, { cache: "no-store" })),
         );
       })
       .catch(() => undefined);

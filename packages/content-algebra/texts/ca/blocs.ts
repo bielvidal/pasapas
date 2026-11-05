@@ -19,7 +19,7 @@ export const BLOCS: BlockText[] = [
       "5 - (2x - 3) = 5 - 2x + 3 = 8 - 2x",
       "3(x - 4) - 2(x + 1) = 3x - 12 - 2x - 2 = x - 14",
     ],
-    disponible: false,
+    disponible: true,
   },
   {
     id: "B2",
@@ -30,7 +30,7 @@ export const BLOCS: BlockText[] = [
       "\\frac{1}{2} + \\frac{1}{3} = \\frac{3}{6} + \\frac{2}{6} = \\frac{5}{6}",
       "\\frac{2}{3} : \\frac{4}{5} = \\frac{2}{3} \\cdot \\frac{5}{4} = \\frac{10}{12} = \\frac{5}{6}",
     ],
-    disponible: false,
+    disponible: true,
   },
   {
     id: "B3",
@@ -38,7 +38,7 @@ export const BLOCS: BlockText[] = [
     reglaOr:
       "Les propietats de les potències funcionen amb **productes i quocients**, mai amb **sumes**: $(a \\cdot b)^n = a^n \\cdot b^n$, però $(a + b)^n \\neq a^n + b^n$.",
     exemples: ["(2x^3)^2 = 2^2 \\cdot (x^3)^2 = 4x^6", "(x + 3)^2 = (x + 3)(x + 3) = x^2 + 6x + 9"],
-    disponible: false,
+    disponible: true,
   },
   {
     id: "B4",
@@ -49,7 +49,7 @@ export const BLOCS: BlockText[] = [
       "2x^2 + 6x = 2x(x + 3) \\quad\\text{(comprovació: } 2x \\cdot x + 2x \\cdot 3 = 2x^2 + 6x\\text{)}",
       "x^2 - 25 = (x + 5)(x - 5) \\quad\\text{(comprovació: } x^2 - 5x + 5x - 25 = x^2 - 25\\text{)}",
     ],
-    disponible: false,
+    disponible: true,
   },
   {
     id: "B5",
@@ -71,7 +71,7 @@ export const BLOCS: BlockText[] = [
       "\\frac{x}{2} + \\frac{x}{3} = 5 \\;\\xrightarrow{\\cdot 6}\\; 3x + 2x = 30 \\;\\Rightarrow\\; 5x = 30 \\;\\Rightarrow\\; x = 6",
       "\\frac{x}{2} - \\frac{x - 1}{3} = 1 \\;\\xrightarrow{\\cdot 6}\\; 3x - 2(x - 1) = 6 \\;\\Rightarrow\\; 3x - 2x + 2 = 6 \\;\\Rightarrow\\; x = 4",
     ],
-    disponible: false,
+    disponible: true,
   },
   {
     id: "B7",
@@ -82,7 +82,7 @@ export const BLOCS: BlockText[] = [
       "x^2 = 3x \\;\\Rightarrow\\; x^2 - 3x = 0 \\;\\Rightarrow\\; x(x - 3) = 0 \\;\\Rightarrow\\; x = 0 \\text{ o } x = 3",
       "2x + 6 = 10 \\;\\xrightarrow{: 2}\\; x + 3 = 5 \\;\\Rightarrow\\; x = 2",
     ],
-    disponible: false,
+    disponible: true,
   },
 ];
 

@@ -25,6 +25,7 @@
 | D16 | Prefijo de la API | **POSICIÓN:** `/api/*` (patrón PPER, mismo origen vía túnel y rewrite de Next), no `/v1` como decía la especificación §7. Rutas: `auth/code`, `auth/login`, `auth/redeem-link`, `auth/logout`, `me`, `me/alias`, `me/sessions`, `attempts/batch`, `sessions/batch`, `attempts?since=&user_id=`, `admin/users`, `admin/invitations`, `admin/invitations/{email}/code`, `health`. | 2026-11-05 |
 | D17 | Estética | **ACUERDO (petición de Biel):** la piel del portal de PPER (fondo gris verdoso, tarjetas blancas, acento teal, IBM Plex Sans/Serif, clases de la casa `.card .btn .btn-soft .btn-danger .field .label .table .link`), portada a tokens CSS (`--c-*`) con variante oscura y selector de tema (claro por defecto). | 2026-11-05 |
 | D18 | BD local por usuario | **POSICIÓN:** IndexedDB `pasapas-u<id>` por cuenta (dos cuentas en el mismo navegador no se mezclan); la BD `pasapas` de la fase 1 se migra a la del primer usuario que entra y se borra. Los intentos llevan `synced` 0/1; cursor de bajada keyset `received_at|id` en `meta`. | 2026-11-05 |
+| D20 | Orden de los bloques de la fase 3 | **ACUERDO:** Biel pidió todos los bloques de una vez; hechos el 2026-11-06 en el orden B1, B2, B3, B4, B6, B7. | 2026-11-06 |
 | D19 | Login obligatorio | **POSICIÓN:** desde la fase 2 la app pide entrar (código) la primera vez en cada dispositivo; después funciona offline con la copia local de la sesión (`localStorage`) y sincroniza al volver la red. Un 401 vuelve a /entrar. | 2026-11-05 |
 
 ### Consecuencia de D2 para la fase 1 (resuelta: D2b, opción A)
@@ -42,4 +43,5 @@ Si Biel prefiere B, la fase 1 crece en unos días.
 |---|---|---|---|
 | D4 | Vista pregunta a pregunta | **DECISIÓN PENDIENTE** | no ahora; reevaluar con más uso |
 | D10 | Correo de la alumna | **DECISIÓN PENDIENTE** (operativa) | Biel la invita desde Administración con el correo que ella use (cuenta propia, distinta de la de Biel, para que el rol `student` quede separado) |
-| D20 | Orden de los bloques de la fase 3 | **DECISIÓN PENDIENTE** | la especificación dice B3 y B7 primero; ajustar al feedback de la alumna |
+| D21 | B5.T3, distractor `x² − s·k` | **DECISIÓN PENDIENTE** | poco creíble como error real (informe §5.2); propuesta: `x − k` cuando s = + y aceptar que el tag no salga cuando s = − |
+| D22 | Desviaciones del catálogo en la fase 3 | **DECISIÓN PENDIENTE (confirmar)** | lista en `REGISTRO.md` S3; al validarlas, corregir `02_CATALOGO_CONTENIDO.md` |

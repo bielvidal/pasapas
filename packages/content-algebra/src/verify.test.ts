@@ -23,7 +23,7 @@ describe("verifyItem detecta errors de debò", () => {
   it("«No es pot simplificar» marcada correcta quan sí es pot", () => {
     const item = buildItem(tpl("B5.T1"), 2);
     for (const o of item.options) o.correct = o.machine?.kind === "claim";
-    expect(verifyItem(item).join()).toMatch(/SÍ es pot simplificar/);
+    expect(verifyItem(item).join()).toMatch(/la correcta d \(No es pot simplificar\) NO equival/);
   });
   it("valid_step amb el flag girat", () => {
     const item = buildItem(tpl("B5.T6"), 3);
