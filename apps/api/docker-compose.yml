@@ -1,6 +1,11 @@
 # Pas a pas · Àlgebra: API (FastAPI, :8900) + el seu Postgres (:5436 al host). El portal Next
 # corre al host (next start :3011 sota systemd). Variables: fitxer .env al costat d'aquest
 # compose (plantilla a .env.example). Ports només a loopback: els exposa el túnel.
+#
+# `name` és OBLIGATORI: sense ell Compose pren el nom de la carpeta (`api`), que és el mateix que
+# el de PPER (services/api) i Aula, i `up` substituiria els seus contenidors api/db (va passar el
+# 2026-11-05: la API de PPER va caure). Els volums i la imatge també porten el prefix del projecte.
+name: pasapas
 services:
   api:
     build: .
@@ -34,11 +39,11 @@ services:
     ports:
       - "127.0.0.1:5436:5432" # 5432-5435 ja els usen altres projectes de la màquina (D7)
     volumes:
-      - pasapas_pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pasapas -d pasapas"]
       interval: 5s
       timeout: 3s
       retries: 10
 volumes:
-  pasapas_pgdata:
+  pgdata:

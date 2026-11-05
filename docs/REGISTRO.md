@@ -93,7 +93,17 @@ calcó el patrón sin importar código.
   dictado → borrado de usuario e invitación. Portal nuevo probado en :3012 (todas las rutas 200, el
   rewrite `/api/health` responde) y parado.
 
-**Pendiente (lo hace Biel):** regla `api` → `localhost:8900` en el túnel (antes de la genérica);
+**Incidente (23:40):** el primer `docker compose up` de `apps/api` tomó el nombre de proyecto `api`
+(el de la carpeta), el mismo que `PPER/services/api` y con los mismos servicios `api`/`db`: Compose
+**sustituyó `pper_api` y `pper_db`** por los contenedores de pasapas y sobrescribió la imagen
+`api-api`. El portal de PPER (3009) no cayó; su volumen `api_pper_pgdata` quedó intacto. Arreglo:
+`name: pasapas` en el compose (obligatorio; comentado en el fichero), contenedores de pasapas
+eliminados, PPER restaurado por Biel con `docker compose up -d --build` en su carpeta (verificado:
+`/api/salud` local y público). Lección de la casa: **todo compose lleva `name:`** (Aula también usa
+`api`: `api_aula_pgdata`). Violación involuntaria de la restricción 1, documentada aquí.
+
+**Pendiente (lo hace Biel):** ~~regla `api` → `localhost:8900` en el túnel~~ hecha y verificada
+(`/api/health` público responde JSON);
 `sudo systemctl restart pasapas-web`; cron de la copia; invitar a la alumna desde Administración y
 dictarle el código; (opcional) `.claude/settings.json` con `docker compose`, `scripts/test-py.sh`…
 **Siguiente sesión:** feedback con sync real entre móvil y PC; fase 3 (bloques, D20).
