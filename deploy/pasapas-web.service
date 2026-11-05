@@ -1,0 +1,20 @@
+# Unit del portal de Pas a pas · Àlgebra (Next, :3011). Instal·lar a
+# /etc/systemd/system/pasapas-web.service (calcada de pper-web.service).
+# Ull (regla de la casa): la ruta de node porta la versió de nvm cuinada; si canvia nvm → sed + daemon-reload.
+#   sudo cp deploy/pasapas-web.service /etc/systemd/system/ && sudo systemctl daemon-reload
+#   sudo systemctl enable --now pasapas-web
+[Unit]
+Description=Pas a pas · Àlgebra (next :3011)
+After=network-online.target
+
+[Service]
+User=biel
+WorkingDirectory=/home/biel/proyectos/pasapas
+Environment=PATH=/home/biel/.nvm/versions/node/v20.20.2/bin:/usr/bin:/bin
+Environment=NODE_ENV=production
+ExecStart=/home/biel/.nvm/versions/node/v20.20.2/bin/npm run start -w @pasapas/web
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

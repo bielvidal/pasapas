@@ -1,0 +1,26 @@
+# secretos y config local: JAMÁS en el repo
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# node / next
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+# service worker generado (post-build con Workbox)
+apps/web/public/sw.js
+apps/web/public/sw.js.map
+apps/web/public/workbox-*.js
+apps/web/public/workbox-*.js.map
+# python (fase 2)
+__pycache__/
+*.pyc
+.pytest_cache/
+# varios
+.DS_Store
+*.log
+var/
+coverage/

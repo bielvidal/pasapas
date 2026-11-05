@@ -1,0 +1,22 @@
+{
+  "name": "@pasapas/content-algebra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Plantilles dels 7 blocs d'àlgebra, textos en català i error_tags. Verificació exacta amb racionals.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./texts/ca": "./texts/ca/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pasapas/engine": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
+  }
+}

@@ -1,0 +1,19 @@
+# Túnel de casa `contable-casa` (Cloudflare). Corre amb `--token`, així que les rutes es
+# gestionen al panell: Zero Trust → Networks → Tunnels → contable-casa → Public Hostname →
+# Add a public hostname:
+#
+#   Subdomain: pasapas     Domain: nereidlabs.net     Path: (buit)
+#   Service:   HTTP        URL:    localhost:3011
+#
+# El DNS pasapas.nereidlabs.net → túnel el crea el panell sol. Fase 1: SENSE Cloudflare Access
+# (l'app no guarda res al servidor; la fase 2 porta login propi amb el patró de PPER).
+#
+# Fase 2 (quan hi hagi API a :8900), afegir ABANS de la genèrica:
+#   Subdomain: pasapas     Path: ^/api/.*     Service: HTTP localhost:8900
+#
+# Equivalent si algun dia el túnel passa a config.yml local (ordre: aquestes abans de http_status:404):
+#   - hostname: pasapas.nereidlabs.net
+#     path: ^/api/.*
+#     service: http://localhost:8900
+#   - hostname: pasapas.nereidlabs.net
+#     service: http://localhost:3011
