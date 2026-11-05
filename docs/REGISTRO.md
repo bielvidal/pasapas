@@ -42,13 +42,18 @@ implementado tal como está escrito (incluido el distractor `x² − s·k` de B5
   són correctes» cuando hay error → el tag del error inyectado (lo ha aceptado).
 - «Saltar» (`skipped`) no mueve la caja de Leitner ni cuenta para el dominio por tag.
 
+**Validación de Biel (misma tarde):** probada en el móvil; textos en catalán OK. Pide selector de
+tema con **claro por defecto** → hecho: `lib/theme.ts` (preferencia en localStorage, `dark` como
+clase en `<html>`, script inline anti-parpadeo), `components/ThemeSelector.tsx` (Clar / Fosc / Com el
+mòbil, en Inici), Tailwind `darkMode: "class"`. 4 tests nuevos (90 en total). Web 0.1.1. Repo GitHub
+`bielvidal/pasapas` creado por Biel; remoto `origin` añadido y primer push.
+
 **Pendiente para la siguiente sesión:**
 
-1. Biel prueba la app en el móvil (`npm run dev` o `npm start` en :3011; o tras el despliegue).
-2. Revisión de los textos en catalán: `packages/content-algebra/texts/ca/{tags,blocs,B5}.ts` y
-   `apps/web/lib/texts.ts`.
+1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).
+2. ~~Revisión de los textos en catalán~~ OK (2026-11-05).
 3. Despliegue (requiere permiso): `sudo cp deploy/pasapas-web.service /etc/systemd/system/`,
    `enable --now`; alta de `pasapas.nereidlabs.net → localhost:3011` en el panel de Cloudflare.
-4. Repo GitHub: Biel crea `bielvidal/pasapas` (privado) y pasa la URL SSH para el primer push.
+4. ~~Repo GitHub~~ creado y primer push hecho (2026-11-05).
 5. Después de una semana de uso: feedback de la alumna, y arrancar la fase 2 (API + sync + login).
 6. Playwright (smoke e2e offline/online de §10) queda para la fase 2: necesita instalar navegadores.

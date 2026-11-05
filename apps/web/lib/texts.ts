@@ -68,6 +68,7 @@ export const UI = {
     vegades: (n: number) => (n === 1 ? "1 vegada" : `${n} vegades`),
     senseIntents: "Encara no has fet cap ronda d'aquest bloc.",
   },
+  aparenca: { titol: "Aparença", light: "Clar", dark: "Fosc", system: "Com el mòbil" },
   offline: "Sense connexió: tot funciona igual, es guarda al teu mòbil.",
   versio: (v: string) => `Versió ${v}`,
 } as const;

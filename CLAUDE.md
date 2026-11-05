@@ -57,7 +57,8 @@ deploy/deploy.sh            # tests → build → sudo systemctl restart pasapas
 - `apps/web` — Next 16 (App Router, tot `"use client"`: local-first, sense SSR de dades). `lib/db.ts`
   (Dexie: `attempts`, `sessions`), `lib/round.ts` (lògica de ronda, testable), `components/Ronda.tsx`
   (pregunta → explicació → resum), `components/Math.tsx` (KaTeX local + `MixedText` per a `$…$` i
-  `**…**`). Pantalles: `/` (blocs + «Repassa els meus errors»), `/bloc/[id]` (Aprèn), `/practica/[id]`,
+  `**…**`), `lib/theme.ts` + `components/ThemeSelector.tsx` (tema clar per defecte / fosc / sistema;
+  Tailwind `darkMode: "class"`, script inline a `layout.tsx` per evitar parpelleig). Pantalles: `/` (blocs + «Repassa els meus errors»), `/bloc/[id]` (Aprèn), `/practica/[id]`,
   `/repas`, `/progres` (= panell del tutor). UI en català a `lib/texts.ts`.
 
 ## Convencions

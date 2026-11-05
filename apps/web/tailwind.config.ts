@@ -3,7 +3,7 @@ import type { Config } from "tailwindcss";
 // Un color d'accent tranquil (verd-blau), fons càlids, res de vermell agressiu (§8).
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
-  darkMode: "media",
+  darkMode: "class",
   theme: {
     extend: {
       colors: {

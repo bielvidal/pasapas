@@ -3,6 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 import { RegisterSW } from "@/components/RegisterSW";
 import { UI } from "@/lib/texts";
+import { THEME_COLORS, THEME_INIT_SCRIPT } from "@/lib/theme";
 
 export const metadata: Metadata = {
   title: UI.app,
@@ -13,10 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#15171b" },
-  ],
+  themeColor: THEME_COLORS.light, // s'actualitza al client segons el tema triat
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -24,7 +22,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ca">
+    <html lang="ca" suppressHydrationWarning>
+      <head>
+        {/* Aplica el tema desat abans del primer render (evita el parpelleig). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className="min-h-dvh font-sans">
         <header
           className="mx-auto flex w-full max-w-xl items-center justify-between px-4 pt-4"

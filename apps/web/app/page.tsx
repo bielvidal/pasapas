@@ -2,6 +2,7 @@
 import { blockMastery, dueReviews, reviewState } from "@pasapas/engine";
 import Link from "next/link";
 import { BlockCard } from "@/components/BlockCard";
+import { ThemeSelector } from "@/components/ThemeSelector";
 import { BLOCS } from "@/lib/content";
 import { UI } from "@/lib/texts";
 import { useAttempts } from "@/lib/useAttempts";
@@ -35,7 +36,10 @@ export default function Inici() {
           />
         ))}
       </div>
-      <p className="mt-6 text-center text-xs text-stone-400">
+      <div className="mt-8">
+        <ThemeSelector />
+      </div>
+      <p className="mt-2 text-center text-xs text-stone-400">
         {UI.versio(process.env.NEXT_PUBLIC_APP_VERSION ?? "dev")}
       </p>
     </div>

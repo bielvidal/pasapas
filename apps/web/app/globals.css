@@ -5,7 +5,10 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
 }
 html {
   -webkit-text-size-adjust: 100%;
