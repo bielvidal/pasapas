@@ -92,7 +92,7 @@ deploy/deploy.sh            # tests → build → sudo systemctl restart pasapas
 
 ## Estat
 
-Fase 1 (prototip) construïda el 2026-11-05: motor + B5 complet + PWA sense backend. Pendent:
-validació de Biel, desplegament (unit systemd + hostname al túnel, amb permís) i una setmana d'ús de
-l'alumna. Fase 2: `apps/api` (FastAPI + Postgres, login amb codi per correu com PPER) i sincronització.
+Fase 1 (prototip) construïda el 2026-11-05: motor + B5 complet + PWA sense backend. Validada per Biel
+i desplegada a `https://pasapas.nereidlabs.net` el mateix dia (unit `pasapas-web`, hostname al túnel).
+Pendent: una setmana d'ús de l'alumna i el seu feedback. Fase 2: `apps/api` (FastAPI + Postgres, login amb codi per correu com PPER) i sincronització.
 Diari de sessions a `docs/REGISTRO.md`.

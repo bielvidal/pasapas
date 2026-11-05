@@ -48,12 +48,17 @@ clase en `<html>`, script inline anti-parpadeo), `components/ThemeSelector.tsx` 
 mòbil, en Inici), Tailwind `darkMode: "class"`. 4 tests nuevos (90 en total). Web 0.1.1. Repo GitHub
 `bielvidal/pasapas` creado por Biel; remoto `origin` añadido y primer push.
 
+**Despliegue (2026-11-05, hecho por Biel desde terminal):** hostname `pasapas.nereidlabs.net →
+localhost:3011` dado de alta en el túnel `contable-casa` (panel Zero Trust, CNAME creado), unidad
+`pasapas-web` instalada, `enable --now`. Verificado: servicio activo y habilitado, el proceso del
+:3011 pertenece a la unit, `https://pasapas.nereidlabs.net/` y `/sw.js` responden 200 con el build
+0.1.1. Sin Cloudflare Access (D2b). Próximos despliegues: `deploy/deploy.sh`.
+
 **Pendiente para la siguiente sesión:**
 
 1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).
 2. ~~Revisión de los textos en catalán~~ OK (2026-11-05).
-3. Despliegue (requiere permiso): `sudo cp deploy/pasapas-web.service /etc/systemd/system/`,
-   `enable --now`; alta de `pasapas.nereidlabs.net → localhost:3011` en el panel de Cloudflare.
+3. ~~Despliegue~~ hecho (2026-11-05); ver arriba.
 4. ~~Repo GitHub~~ creado y primer push hecho (2026-11-05).
 5. Después de una semana de uso: feedback de la alumna, y arrancar la fase 2 (API + sync + login).
 6. Playwright (smoke e2e offline/online de §10) queda para la fase 2: necesita instalar navegadores.

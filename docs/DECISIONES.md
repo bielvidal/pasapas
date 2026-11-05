@@ -12,7 +12,7 @@
 | D2b | Fase 1 sin login | **ACUERDO: la fase 1 se publica sin autenticación.** La PWA no guarda nada en el servidor; todo queda en IndexedDB del móvil. En la fase 2, al entrar por primera vez con su código, los intentos locales se asocian al usuario y se sincronizan. | 2026-11-05 |
 | D0a | Gestor de paquetes | **ACUERDO: npm workspaces** (como La Sensible y PPER). | 2026-11-05 |
 | D0b | ESLint / Prettier | **ACUERDO: se añaden** (ESLint con `eslint-config-next`, Prettier con valores por defecto). | 2026-11-05 |
-| D1 | Dominio y túnel | **ACUERDO: `pasapas.nereidlabs.net` → `localhost:3011`** en `contable-casa`, alta en el panel de Cloudflare con permiso explícito de Biel en el momento de desplegar. | 2026-11-05 |
+| D1 | Dominio y túnel | **ACUERDO: `pasapas.nereidlabs.net` → `localhost:3011`** en `contable-casa`, alta en el panel de Cloudflare con permiso explícito de Biel en el momento de desplegar. **Hecho por Biel el 2026-11-05** (hostname + unidad systemd). | 2026-11-05 |
 | D7 | Puertos | **ACUERDO: web 3011 · API 8900 · Postgres 127.0.0.1:5436.** | 2026-11-05 |
 | D8 | Verificación numérica | **ACUERDO (por validación del informe): racionales exactos (BigInt) y funciones racionales como polinomios; sin mathjs** en la fase 1. La especificación §4 y §5.5 quedan enmendadas en este punto. | 2026-11-05 |
 | D12 | Repo GitHub | **ACUERDO: Biel crea `bielvidal/pasapas` (privado) desde la web** y pasa la URL SSH; no se instala `gh`. | 2026-11-05 |
