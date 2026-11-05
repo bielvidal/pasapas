@@ -9,7 +9,9 @@ export const THEMES: readonly Theme[] = ["light", "dark", "system"];
 export const THEME_KEY = "pasapas-theme";
 export const DEFAULT_THEME: Theme = "light";
 
-export const THEME_COLORS = { light: "#fbfaf7", dark: "#15171b" } as const;
+import { DARK, LIGHT } from "./tokens";
+
+export const THEME_COLORS = { light: LIGHT.paper, dark: DARK.paper } as const;
 
 export function isTheme(v: unknown): v is Theme {
   return typeof v === "string" && (THEMES as readonly string[]).includes(v);

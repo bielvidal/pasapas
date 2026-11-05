@@ -16,9 +16,7 @@ export function Sparkline({ values, className = "" }: { values: number[]; classN
             width={w}
             height={bh}
             rx={2}
-            className={
-              v === 0 ? "fill-stone-300 dark:fill-stone-600" : "fill-warm dark:fill-warm-dark"
-            }
+            fill={v === 0 ? "var(--c-line)" : "var(--c-amber)"}
           />
         );
       })}

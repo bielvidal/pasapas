@@ -28,18 +28,11 @@ export function Explanation({
     onOpenCorrect();
   };
   return (
-    <div
-      className="mt-4 rounded-2xl bg-stone-100 p-4 text-base leading-relaxed dark:bg-stone-800"
-      role="status"
-    >
-      {grade.outcome === "correct" && (
-        <p className="font-semibold text-ok dark:text-ok-dark">{UI.pregunta.moltBe}</p>
-      )}
+    <div className="card mt-4 bg-paper2 text-base leading-relaxed" role="status">
+      {grade.outcome === "correct" && <p className="font-semibold text-ok">{UI.pregunta.moltBe}</p>}
       {grade.outcome === "incorrect" && grade.errorTag && (
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-warm dark:text-warm-dark">
-            {UI.pregunta.aquiHasFet}
-          </p>
+          <p className="label text-amber">{UI.pregunta.aquiHasFet}</p>
           <p className="font-semibold">{tagName(grade.errorTag)}</p>
           <p className="mt-1">
             <MixedText text={override ?? tagExplanation(grade.errorTag)} />
@@ -49,28 +42,14 @@ export function Explanation({
       {grade.outcome === "skipped" && <p className="font-semibold">{UI.pregunta.capProblema}</p>}
 
       {open ? (
-        <div
-          className={
-            grade.outcome === "correct"
-              ? "mt-2"
-              : "mt-3 border-t border-stone-300 pt-3 dark:border-stone-600"
-          }
-        >
-          {grade.outcome === "incorrect" && (
-            <p className="text-sm font-semibold uppercase tracking-wide text-stone-500 dark:text-stone-400">
-              {UI.pregunta.comEsFa}
-            </p>
-          )}
+        <div className={grade.outcome === "correct" ? "mt-2" : "mt-3 border-t border-line pt-3"}>
+          {grade.outcome === "incorrect" && <p className="label">{UI.pregunta.comEsFa}</p>}
           <p>
             <MixedText text={explanationCorrect} />
           </p>
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={openCorrect}
-          className="mt-2 min-h-tap text-accent underline-offset-2 hover:underline dark:text-accent-dark"
-        >
+        <button type="button" onClick={openCorrect} className="link mt-2 min-h-tap">
           {UI.pregunta.perQueCorrecte}
         </button>
       )}

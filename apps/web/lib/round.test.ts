@@ -57,7 +57,7 @@ describe("ronda", () => {
       } as const;
       return makeAttempt("s1", ri, { ...g, presentedErrorTags: [...g.presentedErrorTags] });
     });
-    await db.attempts.bulkAdd(attempts);
+    await db.attempts.bulkAdd(attempts.map((a) => ({ ...a, synced: 0 as const })));
     expect(await db.attempts.count()).toBe(3);
     const s = summarizeRound(attempts);
     expect(s.total).toBe(3);

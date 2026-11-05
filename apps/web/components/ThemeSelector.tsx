@@ -33,15 +33,13 @@ function useTheme(): [Theme, (t: Theme) => void] {
 export function ThemeSelector() {
   const [theme, setTheme] = useTheme();
   return (
-    <fieldset className="flex flex-col items-center gap-2">
+    <fieldset className="flex flex-col gap-2">
       <legend className="sr-only">{UI.aparenca.titol}</legend>
-      <span className="text-xs font-semibold uppercase tracking-wide text-stone-500 dark:text-stone-400">
-        {UI.aparenca.titol}
-      </span>
+      <span className="label">{UI.aparenca.titol}</span>
       <div
         role="radiogroup"
         aria-label={UI.aparenca.titol}
-        className="inline-flex rounded-full border border-stone-300 bg-paper-card p-1 dark:border-stone-600 dark:bg-paper-darkcard"
+        className="inline-flex self-start rounded-full border border-line bg-paper2 p-1"
       >
         {THEMES.map((t) => {
           const active = theme === t;
@@ -54,9 +52,7 @@ export function ThemeSelector() {
               onClick={() => setTheme(t)}
               className={
                 "min-h-tap rounded-full px-4 text-sm font-medium transition-colors " +
-                (active
-                  ? "bg-accent text-white dark:bg-accent-dark dark:text-stone-900"
-                  : "text-stone-600 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-700")
+                (active ? "bg-teal text-card" : "text-soft hover:text-ink")
               }
             >
               {UI.aparenca[t]}

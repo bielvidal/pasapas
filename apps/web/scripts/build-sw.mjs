@@ -13,7 +13,13 @@ const { count, size, warnings } = await generateSW({
   cleanupOutdatedCaches: true,
   mode: "production",
   navigateFallback: "/",
+  navigateFallbackDenylist: [/^\/api\//],
   runtimeCaching: [
+    {
+      // L'API mai de la caché.
+      urlPattern: ({ url }) => url.pathname.startsWith("/api/"),
+      handler: "NetworkOnly",
+    },
     {
       // Pantalles: fresques si hi ha xarxa, de la caché si no.
       urlPattern: ({ request }) => request.mode === "navigate",

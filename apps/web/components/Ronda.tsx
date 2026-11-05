@@ -6,6 +6,7 @@ import { tagName } from "@/lib/content";
 import { db } from "@/lib/db";
 import { uuid } from "@/lib/ids";
 import { gradeValidStep, makeAttempt, summarizeRound, type RoundItem } from "@/lib/round";
+import { scheduleSync } from "@/lib/sync";
 import { UI } from "@/lib/texts";
 import { Explanation } from "./Explanation";
 import { Math, MixedText } from "./Math";
@@ -43,6 +44,7 @@ export function Ronda({
       block,
       startedAt: new Date().toISOString(),
       endedAt: null,
+      synced: 0,
     });
   }, [sessionId, mode, block]);
 
@@ -53,7 +55,8 @@ export function Ronda({
       if (!current) return;
       const a = makeAttempt(sessionId, current, g);
       lastAttemptId.current = a.id;
-      await db().attempts.add(a);
+      await db().attempts.add({ ...a, synced: 0 });
+      scheduleSync();
       setAttempts((prev) => [...prev, a]);
       setGrade(g);
       setPhase("answered");
@@ -77,7 +80,8 @@ export function Ronda({
 
   const next = async () => {
     if (index + 1 >= items.length) {
-      await db().sessions.update(sessionId, { endedAt: new Date().toISOString() });
+      await db().sessions.update(sessionId, { endedAt: new Date().toISOString(), synced: 0 });
+      scheduleSync(300);
       setPhase("done");
       return;
     }
@@ -102,42 +106,35 @@ export function Ronda({
     : undefined;
 
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 pb-28 pt-4">
-      <div className="flex items-center justify-between text-sm text-stone-500 dark:text-stone-400">
+    <div className="flex flex-col gap-4 pb-24">
+      <div className="flex items-center justify-between text-sm text-soft">
         <span>{UI.pregunta.de(index + 1, items.length)}</span>
         <span className="flex gap-2">
           {plan.slot === "review" && (
-            <span className="rounded-full bg-accent-soft px-2 py-0.5 text-accent dark:bg-accent/20 dark:text-accent-dark">
+            <span className="rounded-full bg-tealSoft px-2 py-0.5 text-teal">
               {UI.pregunta.repas}
             </span>
           )}
           {plan.slot === "next" && (
-            <span className="rounded-full bg-stone-200 px-2 py-0.5 dark:bg-stone-700">
-              {UI.pregunta.nouNivell}
-            </span>
+            <span className="rounded-full bg-paper2 px-2 py-0.5">{UI.pregunta.nouNivell}</span>
           )}
         </span>
       </div>
-      <div
-        className="h-1.5 w-full overflow-hidden rounded-full bg-stone-200 dark:bg-stone-700"
-        aria-hidden
-      >
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-paper2" aria-hidden>
         <div
-          className="h-full bg-accent transition-all dark:bg-accent-dark"
+          className="h-full bg-teal transition-all"
           style={{ width: `${((index + (answered ? 1 : 0)) / items.length) * 100}%` }}
         />
       </div>
 
-      <section className="rounded-3xl bg-paper-card p-5 shadow-sm dark:bg-paper-darkcard">
-        <p className="text-sm font-semibold uppercase tracking-wide text-stone-500 dark:text-stone-400">
-          {item.instruction}
-        </p>
+      <section className="card">
+        <p className="label">{item.instruction}</p>
         {item.type === "find_error" ? (
           <Math latex={item.promptLatex} display className="mt-2 text-xl" />
         ) : item.type === "valid_step" ? (
           <div className="mt-3 flex flex-col items-center gap-1 text-2xl">
             <Math latex={item.step.beforeLatex} display />
-            <span className="text-stone-400">⇓</span>
+            <span className="text-faint">⇓</span>
             <Math latex={item.step.afterLatex} display />
           </div>
         ) : (
@@ -174,14 +171,14 @@ export function Ronda({
           <button
             type="button"
             onClick={() => setSaidValid(true)}
-            className="min-h-tap rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-lg dark:border-stone-600 dark:bg-paper-darkcard"
+            className="min-h-tap rounded-2xl border-2 border-line2 bg-card px-4 py-3 text-lg hover:border-teal active:bg-tealSoft"
           >
             {UI.pregunta.siValid}
           </button>
           <button
             type="button"
             onClick={() => setSaidValid(false)}
-            className="min-h-tap rounded-2xl border-2 border-stone-300 bg-white px-4 py-3 text-lg dark:border-stone-600 dark:bg-paper-darkcard"
+            className="min-h-tap rounded-2xl border-2 border-line2 bg-card px-4 py-3 text-lg hover:border-teal active:bg-tealSoft"
           >
             {UI.pregunta.noValid}
           </button>
@@ -190,7 +187,7 @@ export function Ronda({
 
       {item.type === "valid_step" && (saidValid !== null || answered) && (
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold uppercase tracking-wide text-stone-500 dark:text-stone-400">
+          <p className="label">
             {saidValid === null ? "" : saidValid ? UI.pregunta.siValid : UI.pregunta.noValid} ·{" "}
             {UI.pregunta.perQue}
           </p>
@@ -230,7 +227,7 @@ export function Ronda({
       )}
 
       <div
-        className="fixed inset-x-0 bottom-0 border-t border-stone-200 bg-paper/95 p-3 backdrop-blur dark:border-stone-700 dark:bg-paper-dark/95"
+        className="fixed inset-x-0 bottom-0 border-t border-line bg-card/95 p-3 backdrop-blur"
         style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
       >
         <div className="mx-auto flex max-w-xl gap-3">
@@ -238,7 +235,7 @@ export function Ronda({
             <button
               type="button"
               onClick={() => choose(null)}
-              className="min-h-tap flex-1 rounded-2xl border-2 border-stone-300 px-4 py-3 text-lg text-stone-700 dark:border-stone-600 dark:text-stone-200"
+              className="btn-soft flex-1 rounded-2xl px-4 py-3 text-lg"
             >
               {UI.pregunta.encaraNo}
             </button>
@@ -246,7 +243,7 @@ export function Ronda({
             <button
               type="button"
               onClick={() => void next()}
-              className="min-h-tap flex-1 rounded-2xl bg-accent px-4 py-3 text-lg font-semibold text-white dark:bg-accent-dark dark:text-stone-900"
+              className="btn flex-1 rounded-2xl px-4 py-3 text-lg font-semibold"
             >
               {index + 1 >= items.length ? UI.pregunta.acabar : UI.pregunta.seguent}
             </button>
@@ -260,15 +257,15 @@ export function Ronda({
 function Resum({ attempts, onAgain }: { attempts: Attempt[]; onAgain: () => void }) {
   const s = summarizeRound(attempts);
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 py-6">
-      <h1 className="text-2xl font-bold">{UI.final.titol}</h1>
+    <div className="flex flex-col gap-5 animate-fadeUp">
+      <h1 className="font-display text-2xl font-semibold">{UI.final.titol}</h1>
       <p className="text-lg">
         {UI.final.resum(s.correct, s.total)}
-        {s.skipped > 0 && <span className="text-stone-500"> · {UI.final.saltades(s.skipped)}</span>}
+        {s.skipped > 0 && <span className="text-soft"> · {UI.final.saltades(s.skipped)}</span>}
       </p>
       {s.avoided.length > 0 && (
-        <section className="rounded-3xl bg-ok-soft p-5 dark:bg-ok/15">
-          <h2 className="font-semibold text-ok dark:text-ok-dark">{UI.final.jaNoEtPassa}</h2>
+        <section className="rounded-2xl bg-okSoft p-5">
+          <h2 className="font-semibold text-ok">{UI.final.jaNoEtPassa}</h2>
           <ul className="mt-2 list-disc pl-5">
             {s.avoided.map((t) => (
               <li key={t}>{tagName(t)}</li>
@@ -276,7 +273,7 @@ function Resum({ attempts, onAgain }: { attempts: Attempt[]; onAgain: () => void
           </ul>
         </section>
       )}
-      <section className="rounded-3xl bg-stone-100 p-5 dark:bg-stone-800">
+      <section className="card bg-paper2 p-5">
         <h2 className="font-semibold">{UI.final.perRepassar}</h2>
         {s.chosen.length === 0 ? (
           <p className="mt-2">{UI.final.resPerRepassar}</p>
@@ -285,26 +282,17 @@ function Resum({ attempts, onAgain }: { attempts: Attempt[]; onAgain: () => void
             {s.chosen.map(({ tag, count }) => (
               <li key={tag}>
                 <MixedText text={tagName(tag)} />
-                {count > 1 && (
-                  <span className="text-stone-500"> · {UI.progres.vegades(count)}</span>
-                )}
+                {count > 1 && <span className="text-soft"> · {UI.progres.vegades(count)}</span>}
               </li>
             ))}
           </ul>
         )}
       </section>
       <div className="flex flex-col gap-3">
-        <button
-          type="button"
-          onClick={onAgain}
-          className="min-h-tap rounded-2xl bg-accent px-4 py-3 text-lg font-semibold text-white dark:bg-accent-dark dark:text-stone-900"
-        >
+        <button type="button" onClick={onAgain} className="btn py-3 text-lg">
           {UI.final.unaAltra}
         </button>
-        <Link
-          href="/"
-          className="min-h-tap rounded-2xl border-2 border-stone-300 px-4 py-3 text-center text-lg dark:border-stone-600"
-        >
+        <Link href="/" className="btn-soft py-3 text-lg">
           {UI.final.inici}
         </Link>
       </div>

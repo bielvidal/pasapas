@@ -6,6 +6,7 @@ import { ALL_TEMPLATES, blocById } from "@/lib/content";
 import { db } from "@/lib/db";
 import { randomSeed } from "@/lib/ids";
 import { buildPracticeRound, type RoundItem } from "@/lib/round";
+import { UI } from "@/lib/texts";
 
 export default function Practica() {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +29,7 @@ export default function Practica() {
   }, [templates, id, seed]);
 
   if (!bloc || !bloc.disponible) notFound();
-  if (!items) return <div className="p-6 text-center text-stone-500">…</div>;
+  if (!items) return <p className="text-soft">{UI.carregant}</p>;
   return (
     <Ronda
       key={seed}

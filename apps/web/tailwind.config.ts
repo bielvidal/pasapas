@@ -1,21 +1,35 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
+import { cssVar, cssVars, DARK, FONTS, LIGHT, type Token } from "./lib/tokens";
 
-// Un color d'accent tranquil (verd-blau), fons càlids, res de vermell agressiu (§8).
+const colors = Object.fromEntries(
+  (Object.keys(LIGHT) as Token[]).map((k) => [k, `var(${cssVar(k)})`]),
+) as Record<Token, string>;
+
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   darkMode: "class",
   theme: {
     extend: {
-      colors: {
-        accent: { DEFAULT: "#0f766e", soft: "#ccfbf1", dark: "#5eead4" },
-        ok: { DEFAULT: "#15803d", soft: "#dcfce7", dark: "#86efac" },
-        warm: { DEFAULT: "#b45309", soft: "#fef3c7", dark: "#fcd34d" },
-        paper: { DEFAULT: "#fbfaf7", card: "#ffffff", dark: "#15171b", darkcard: "#1f2228" },
-      },
-      fontFamily: { sans: ["Inter Variable", "system-ui", "sans-serif"] },
+      colors,
+      fontFamily: FONTS as unknown as Record<string, string[]>,
       minHeight: { tap: "3rem" },
+      keyframes: {
+        fadeUp: {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "none" },
+        },
+      },
+      animation: { fadeUp: "fadeUp .35s ease both" },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addBase }) => {
+      addBase({
+        ":root": { ...cssVars(LIGHT), colorScheme: "light" },
+        ".dark": { ...cssVars(DARK), colorScheme: "dark" },
+      });
+    }),
+  ],
 };
 export default config;

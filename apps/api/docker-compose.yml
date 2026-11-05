@@ -1,0 +1,44 @@
+# Pas a pas · Àlgebra: API (FastAPI, :8900) + el seu Postgres (:5436 al host). El portal Next
+# corre al host (next start :3011 sota systemd). Variables: fitxer .env al costat d'aquest
+# compose (plantilla a .env.example). Ports només a loopback: els exposa el túnel.
+services:
+  api:
+    build: .
+    container_name: pasapas_api
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8900:8900"
+    environment:
+      DATABASE_URL: postgresql+psycopg://pasapas:${POSTGRES_PASSWORD:-pasapas}@db:5432/pasapas
+      AUTO_INITDB: "1"
+      PASAPAS_PORTAL_URL: ${PASAPAS_PORTAL_URL:-http://localhost:3011}
+      PASAPAS_TUTOR_EMAILS: ${PASAPAS_TUTOR_EMAILS:?falta PASAPAS_TUTOR_EMAILS a .env}
+      PASAPAS_COOKIE_SECURE: ${PASAPAS_COOKIE_SECURE:-0}
+      PASAPAS_MAIL_BACKEND: ${PASAPAS_MAIL_BACKEND:-console}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-pasapas@nereidlabs.net}
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:16-alpine
+    container_name: pasapas_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pasapas
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pasapas}
+      POSTGRES_DB: pasapas
+    ports:
+      - "127.0.0.1:5436:5432" # 5432-5435 ja els usen altres projectes de la màquina (D7)
+    volumes:
+      - pasapas_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pasapas -d pasapas"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  pasapas_pgdata:

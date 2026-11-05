@@ -29,6 +29,10 @@ export default tseslint.config(
         { object: "Math", property: "random", message: "Usa el Rng con semilla del motor." },
       ],
       "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", ignoreRestSiblings: true },
+      ],
     },
   },
   {

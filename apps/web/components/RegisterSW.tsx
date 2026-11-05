@@ -10,7 +10,7 @@ export function RegisterSW() {
       .then(async () => {
         // Primera visita: demana les pantalles perquè quedin a la caché i l'app vagi offline.
         await Promise.allSettled(
-          ["/", "/bloc/B5", "/practica/B5", "/repas", "/progres"].map((u) =>
+          ["/", "/bloc/B5", "/practica/B5", "/repas", "/progres", "/compte"].map((u) =>
             fetch(u, { cache: "no-store" }),
           ),
         );

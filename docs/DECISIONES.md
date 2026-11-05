@@ -18,6 +18,14 @@
 | D12 | Repo GitHub | **ACUERDO: Biel crea `bielvidal/pasapas` (privado) desde la web** y pasa la URL SSH; no se instala `gh`. | 2026-11-05 |
 | D13 | Sitio de `fmt` y del kit matemático | **POSICIÓN:** el motor (`packages/engine`) no sabe de álgebra, así que `fmt`, los racionales y las funciones racionales viven en `packages/content-algebra/src/math/`. El catálogo dice «`fmt` del motor»; se interpreta como «del paquete de contenido». | 2026-11-05 |
 | D14 | Informe de fase 0 | **ACUERDO: validado por Biel** el 2026-11-05. Arranca la fase 1. | 2026-11-05 |
+| D15 | Fase 1 validada | **ACUERDO:** Biel y la alumna la probaron («todo ok»); Biel pide **seguir con las fases y copiar de PPER la estética, el login, la administración y la arquitectura**. Arranca la fase 2. | 2026-11-05 |
+| D3 | Agregación del panel | **ACUERDO (fase 2): todo en TS en el cliente desde intentos crudos.** El tutor abre `/progres?user=ID` y el mismo componente calcula dominio, series y tags con el motor sobre los intentos de la alumna leídos de `GET /api/attempts?user_id=`. Sin `summary` SQL: nada de lógica duplicada en Python. | 2026-11-05 |
+| D6 | Nombre | **ACUERDO:** «Pas a pas · Àlgebra», slug `pasapas`, scope `@pasapas/*`, `pasapas.nereidlabs.net`. | 2026-11-05 |
+| D11 | Correo saliente | **ACUERDO (fase 2): sin SMTP obligatorio.** El tutor genera el código de entrada desde Administración («Genera un codi») o con el CLI y se lo dicta a la alumna; `PASAPAS_MAIL_BACKEND=console` por defecto. Si Biel quiere correo real, copia las `SMTP_*` del `.env` de PPER (Gmail con contraseña de aplicación) y pone `smtp`. | 2026-11-05 |
+| D16 | Prefijo de la API | **POSICIÓN:** `/api/*` (patrón PPER, mismo origen vía túnel y rewrite de Next), no `/v1` como decía la especificación §7. Rutas: `auth/code`, `auth/login`, `auth/redeem-link`, `auth/logout`, `me`, `me/alias`, `me/sessions`, `attempts/batch`, `sessions/batch`, `attempts?since=&user_id=`, `admin/users`, `admin/invitations`, `admin/invitations/{email}/code`, `health`. | 2026-11-05 |
+| D17 | Estética | **ACUERDO (petición de Biel):** la piel del portal de PPER (fondo gris verdoso, tarjetas blancas, acento teal, IBM Plex Sans/Serif, clases de la casa `.card .btn .btn-soft .btn-danger .field .label .table .link`), portada a tokens CSS (`--c-*`) con variante oscura y selector de tema (claro por defecto). | 2026-11-05 |
+| D18 | BD local por usuario | **POSICIÓN:** IndexedDB `pasapas-u<id>` por cuenta (dos cuentas en el mismo navegador no se mezclan); la BD `pasapas` de la fase 1 se migra a la del primer usuario que entra y se borra. Los intentos llevan `synced` 0/1; cursor de bajada keyset `received_at|id` en `meta`. | 2026-11-05 |
+| D19 | Login obligatorio | **POSICIÓN:** desde la fase 2 la app pide entrar (código) la primera vez en cada dispositivo; después funciona offline con la copia local de la sesión (`localStorage`) y sincroniza al volver la red. Un 401 vuelve a /entrar. | 2026-11-05 |
 
 ### Consecuencia de D2 para la fase 1 (resuelta: D2b, opción A)
 
@@ -32,8 +40,6 @@ Si Biel prefiere B, la fase 1 crece en unos días.
 
 | # | Tema | Estado | Propuesta (informe §4) |
 |---|---|---|---|
-| D3 | Agregación del panel | **DECISIÓN PENDIENTE** | todo en TS en el cliente desde intentos crudos; `summary` SQL opcional |
-| D4 | Vista pregunta a pregunta | **DECISIÓN PENDIENTE** | no ahora; reevaluar tras la semana de uso |
-| D6 | Nombre | **DECISIÓN PENDIENTE** | «Pas a pas · Àlgebra», slug `pasapas`, scope `@pasapas/*` |
-| D10 | Correo de la alumna | **DECISIÓN PENDIENTE** (fase 2) | cuenta propia, distinta de la de Biel, para que el rol `student` quede separado |
-| D11 | Correo saliente de la API | **DECISIÓN PENDIENTE** (fase 2) | `console` + CLI de rescate como PPER, o SMTP de SES con un remitente de `nereidlabs.net` |
+| D4 | Vista pregunta a pregunta | **DECISIÓN PENDIENTE** | no ahora; reevaluar con más uso |
+| D10 | Correo de la alumna | **DECISIÓN PENDIENTE** (operativa) | Biel la invita desde Administración con el correo que ella use (cuenta propia, distinta de la de Biel, para que el rol `student` quede separado) |
+| D20 | Orden de los bloques de la fase 3 | **DECISIÓN PENDIENTE** | la especificación dice B3 y B7 primero; ajustar al feedback de la alumna |

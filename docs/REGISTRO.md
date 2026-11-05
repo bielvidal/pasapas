@@ -54,11 +54,55 @@ localhost:3011` dado de alta en el túnel `contable-casa` (panel Zero Trust, CNA
 :3011 pertenece a la unit, `https://pasapas.nereidlabs.net/` y `/sw.js` responden 200 con el build
 0.1.1. Sin Cloudflare Access (D2b). Próximos despliegues: `deploy/deploy.sh`.
 
-**Pendiente para la siguiente sesión:**
+**Pendiente para la siguiente sesión (cerrado en S2):** ver abajo.
+
+## S2 · 2026-11-05 (noche) · Fase 2: backend, login, administración, sincronización y estética PPER
+
+Biel y la alumna probaron la fase 1 («todo ok») y Biel pidió seguir con las fases copiando de PPER
+todo lo útil (estética, login, administración, arquitectura). Se leyó PPER en solo lectura
+(`services/api/pper/*`, `apps/web/{app,components,lib}`, `deploy/*`, `scripts/test-py.sh`) y se
+calcó el patrón sin importar código.
+
+**Construido:**
+
+- `apps/api` (FastAPI + SQLAlchemy 2 + Postgres 16 en Docker Compose; api :8900, db 127.0.0.1:5436;
+  contenedores `pasapas_api`/`pasapas_db`, volumen `pasapas_pgdata`). Módulos `settings`, `db`
+  (create_all + migraciones SQL numeradas), `models` (users, invitations, login_codes, magic_links,
+  auth_sessions, study_sessions, attempts con índices de §6), `auth` (código de 6 cifras, un uso,
+  caduca en 10 min, se quema a los 5 fallos; cookie `pasapas_session` httpOnly 180 días renovable;
+  tutores por `PASAPAS_TUTOR_EMAILS`; lista de invitados con alias), `mail` (console/smtp/memoria),
+  `ratelimit` (por IP, lee `cf-connecting-ip`), `cli` (initdb, invite, code, link, tutor, users),
+  routers `auth`, `sync` (lotes idempotentes por id; `GET /api/attempts` con cursor keyset
+  `received_at|id`; el tutor lee los de cualquier usuario), `admin` (usuarios, dispositivos,
+  invitaciones, **código dictado** sin correo). Errores `{error, message}` en catalán. 25 tests
+  pytest sobre SQLite dentro del contenedor (`scripts/test-py.sh` / `npm run test:api`).
+- `apps/web`: piel de PPER vía tokens CSS (`lib/tokens.ts`, plugin Tailwind, `.dark`), IBM Plex,
+  `Frame` (cabecera fija con navegación), `AuthGate` (sesión: caché local + `/api/me`, offline
+  tolerante), `/entrar` (correo → código), `/entrar/enllac` (rescate CLI), `/compte` (alias,
+  dispositivos, sincronización, tema, salir, borrar cuenta), `/admin` (Convidats con «Genera un
+  codi»; Usuaris con progreso, dispositivos, borrar), `/progres` con selector de alumna para el
+  tutor (misma vista, D3). BD local por usuario (D18) con migración de la fase 1; `lib/sync.ts`
+  (push de pendientes tras cada intento y al volver la red; pull por cursor). Rewrite `/api/*` →
+  :8900 en desarrollo; service worker con `/api` en NetworkOnly. 17 tests (sync, api, theme, round).
+- `deploy/`: `deploy.sh` (api/web), `backup-db.sh` (cron 04:30 → `~/var/pasapas-backups`, 30 días),
+  `verify-backup.sh` (restaura en una BD de prueba: **verificado**, criterio de salida de la fase 2),
+  `tunnel-ingress.example.yaml` con la regla `/api` → :8900.
+- `apps/api/.env` creado (contraseña aleatoria, tutor = correo de Biel, `console`), compose
+  levantado, smoke end-to-end contra Postgres real: invitar → código → login → lote (idempotente) →
+  lectura con cursor → tutor ve los intentos de la alumna → alumna no entra en admin → código
+  dictado → borrado de usuario e invitación. Portal nuevo probado en :3012 (todas las rutas 200, el
+  rewrite `/api/health` responde) y parado.
+
+**Pendiente (lo hace Biel):** regla `api` → `localhost:8900` en el túnel (antes de la genérica);
+`sudo systemctl restart pasapas-web`; cron de la copia; invitar a la alumna desde Administración y
+dictarle el código; (opcional) `.claude/settings.json` con `docker compose`, `scripts/test-py.sh`…
+**Siguiente sesión:** feedback con sync real entre móvil y PC; fase 3 (bloques, D20).
+
+**Pendiente histórico de S1:**
 
 1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).
 2. ~~Revisión de los textos en catalán~~ OK (2026-11-05).
 3. ~~Despliegue~~ hecho (2026-11-05); ver arriba.
 4. ~~Repo GitHub~~ creado y primer push hecho (2026-11-05).
-5. Después de una semana de uso: feedback de la alumna, y arrancar la fase 2 (API + sync + login).
+5. ~~Después de una semana de uso: feedback de la alumna, y arrancar la fase 2~~ la fase 2 se construyó en S2 (misma noche).
 6. Playwright (smoke e2e offline/online de §10) queda para la fase 2: necesita instalar navegadores.

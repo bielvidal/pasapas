@@ -39,8 +39,11 @@ npm run test:seeds          # content-algebra amb 2000 llavors
 npm run check               # prettier --check + eslint + tsc + tests (abans de cada commit)
 npm run format              # prettier --write
 npm run build               # next build + service worker (Workbox) → apps/web/public/sw.js
-npm start                   # next start -p 3011
-deploy/deploy.sh            # tests → build → sudo systemctl restart pasapas-web → salut
+npm start                   # next start -p 3011 (rewrite /api/* → :8900 en local)
+npm run test:api            # pytest de l'API dins de Docker (scripts/test-py.sh)
+(cd apps/api && docker compose up -d --build)   # API + Postgres
+deploy/deploy.sh [api|web]  # tests → build/compose → sudo systemctl restart pasapas-web → salut
+deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); verify-backup.sh restaura en BD de prova
 ```
 
 ## Mapa del repo
@@ -59,7 +62,19 @@ deploy/deploy.sh            # tests → build → sudo systemctl restart pasapas
   (pregunta → explicació → resum), `components/Math.tsx` (KaTeX local + `MixedText` per a `$…$` i
   `**…**`), `lib/theme.ts` + `components/ThemeSelector.tsx` (tema clar per defecte / fosc / sistema;
   Tailwind `darkMode: "class"`, script inline a `layout.tsx` per evitar parpelleig). Pantalles: `/` (blocs + «Repassa els meus errors»), `/bloc/[id]` (Aprèn), `/practica/[id]`,
-  `/repas`, `/progres` (= panell del tutor). UI en català a `lib/texts.ts`.
+  `/repas`, `/progres` (= panell del tutor; el tutor hi tria l'alumna amb `?user=`), `/entrar`,
+  `/compte`, `/admin` (tutor). UI en català a `lib/texts.ts`. Pell de PPER: tokens a `lib/tokens.ts`
+  (variables CSS `--c-*`, variant `.dark`), classes de la casa a `globals.css` (`.card .btn .btn-soft
+.btn-danger .field .label .table .link`), `components/Frame.tsx` (capçalera, `Notice`, `Pill`).
+  Sessió: `components/AuthGate.tsx` + `lib/session.tsx` (caché a localStorage, offline tolerant).
+  BD local **per usuari** (`pasapas-u<id>`, `lib/db.ts`) i cua de sincronització `lib/sync.ts`
+  (push de `synced: 0` després de cada intent; pull per cursor keyset `received_at|id`).
+- `apps/api` — FastAPI + SQLAlchemy 2 + Postgres 16 (Docker Compose: api :8900, db 127.0.0.1:5436;
+  `.env` al costat del compose, mai al repo). Patró PPER calcat: `auth.py` (codi de 6 xifres per
+  correu o dictat, cookie `pasapas_session` httpOnly 180 dies), `routers/{auth,sync,admin}.py`,
+  `cli.py` (`docker compose exec api python -m pasapas.cli invite|code|link|tutor|users`).
+  Errors sempre `{error, message}` (català). Tests pytest DINS del contenidor:
+  `scripts/test-py.sh` (el python del host és 3.8).
 
 ## Convencions
 
@@ -92,7 +107,9 @@ deploy/deploy.sh            # tests → build → sudo systemctl restart pasapas
 
 ## Estat
 
-Fase 1 (prototip) construïda el 2026-11-05: motor + B5 complet + PWA sense backend. Validada per Biel
-i desplegada a `https://pasapas.nereidlabs.net` el mateix dia (unit `pasapas-web`, hostname al túnel).
-Pendent: una setmana d'ús de l'alumna i el seu feedback. Fase 2: `apps/api` (FastAPI + Postgres, login amb codi per correu com PPER) i sincronització.
+Fase 1 (prototip) construïda i desplegada el 2026-11-05 a `https://pasapas.nereidlabs.net` (unit
+`pasapas-web`, hostname al túnel); validada per Biel i l'alumna. Fase 2 construïda la mateixa nit:
+API + login + administració + sincronització + pell de PPER (compose aixecat, smoke end-to-end i
+còpia verificada). Pendent de Biel: regla `api` → :8900 al túnel, restart de la unit, cron de la
+còpia, convidar l'alumna. Fase 3: blocs B3, B7, B1, B2, B4, B6 (ordre segons feedback, D20).
 Diari de sessions a `docs/REGISTRO.md`.

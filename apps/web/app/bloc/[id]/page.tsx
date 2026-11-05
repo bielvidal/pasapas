@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
+import { SectionTitle } from "@/components/Frame";
 import { Math, MixedText } from "@/components/Math";
 import { blocById } from "@/lib/content";
 import { UI } from "@/lib/texts";
@@ -10,41 +11,32 @@ export default function Apren() {
   const bloc = blocById(id);
   if (!bloc || !bloc.disponible) notFound();
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-5 px-4 py-6">
+    <div className="flex flex-col gap-5 animate-fadeUp">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-stone-500 dark:text-stone-400">
-          {bloc.id}
-        </p>
-        <h1 className="text-2xl font-bold leading-tight">{bloc.titol}</h1>
+        <p className="label">{bloc.id}</p>
+        <h1 className="font-display text-2xl font-semibold leading-tight">{bloc.titol}</h1>
       </div>
-      <section className="rounded-3xl bg-accent-soft p-5 dark:bg-accent/15">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-accent dark:text-accent-dark">
-          {UI.apren.reglaOr}
-        </h2>
+      <section className="rounded-2xl bg-tealSoft p-5">
+        <h2 className="label text-teal">{UI.apren.reglaOr}</h2>
         <p className="mt-2 text-lg leading-relaxed">
           <MixedText text={bloc.reglaOr} />
         </p>
       </section>
-      <section className="rounded-3xl bg-paper-card p-5 shadow-sm dark:bg-paper-darkcard">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-500 dark:text-stone-400">
-          {UI.apren.exemples}
-        </h2>
+      <section className="card">
+        <SectionTitle>{UI.apren.exemples}</SectionTitle>
         <ol className="mt-2 flex flex-col gap-3">
           {bloc.exemples.map((e, i) => (
             <li key={i} className="flex gap-3">
-              <span className="shrink-0 font-semibold text-stone-400">{i + 1}.</span>
+              <span className="shrink-0 font-semibold text-faint">{i + 1}.</span>
               <Math latex={e} display className="flex-1 text-lg" />
             </li>
           ))}
         </ol>
       </section>
-      <Link
-        href={`/practica/${bloc.id}`}
-        className="min-h-tap rounded-2xl bg-accent px-4 py-4 text-center text-lg font-semibold text-white dark:bg-accent-dark dark:text-stone-900"
-      >
+      <Link href={`/practica/${bloc.id}`} className="btn py-4 text-lg">
         {UI.apren.comenca}
       </Link>
-      <Link href="/" className="min-h-tap py-2 text-center text-accent dark:text-accent-dark">
+      <Link href="/" className="link min-h-tap py-2 text-center">
         {UI.apren.tornar}
       </Link>
     </div>
