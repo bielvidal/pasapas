@@ -58,7 +58,7 @@ export function frac(n: string, d: string): string {
   return `\\frac{${n}}{${d}}`;
 }
 
-/** Posa parèntesis si la cadena té més d'un terme a primer nivell (hi ha un + o − fora de \frac{}). */
+/** Posa parèntesis si la cadena té més d'un terme a primer nivell (un + o − fora de {} i de ()). */
 export function paren(s: string): string {
   return needsParens(s) ? `(${s})` : s;
 }
@@ -67,8 +67,8 @@ export function needsParens(s: string): boolean {
   let depth = 0;
   for (let i = 0; i < s.length; i++) {
     const ch = s[i];
-    if (ch === "{") depth++;
-    else if (ch === "}") depth--;
+    if (ch === "{" || ch === "(") depth++;
+    else if (ch === "}" || ch === ")") depth--;
     else if (depth === 0 && i > 0 && (ch === "+" || ch === "-")) return true;
   }
   return false;

@@ -91,3 +91,10 @@ describe("fmt", () => {
     expect(fmt.plus("x", "-3")).toBe("x - 3");
   });
 });
+
+describe("fmt.prod amb potències entre parèntesis", () => {
+  it("no duplica parèntesis: 2x·(x − 4)^2 → 2x(x - 4)^{2}", () => {
+    expect(fmt.prod("2x", "(x - 4)^{2}")).toBe("2x(x - 4)^{2}");
+    expect(fmt.prod("2x", "x - 4")).toBe("2x(x - 4)");
+  });
+});

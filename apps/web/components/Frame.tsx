@@ -41,6 +41,7 @@ export function Frame({
             <nav className="-mr-3 flex flex-wrap items-center">
               {item("/progres", UI.nav.progres)}
               {me.role === "tutor" && item("/admin", UI.nav.admin)}
+              {me.role === "tutor" && item("/revisio", UI.nav.revisio)}
               {item("/compte", me.alias || UI.nav.compte)}
             </nav>
           )}

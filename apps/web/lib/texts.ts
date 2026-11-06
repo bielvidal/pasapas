@@ -7,6 +7,17 @@ export const UI = {
     progres: "El meu progrés",
     admin: "Administració",
     compte: "El meu compte",
+    revisio: "Revisió",
+  },
+  revisio: {
+    titol: "Revisió de plantilles",
+    sub: "Cada plantilla amb exemples generats (llavors 1, 2, 3…). La correcta va marcada; els distractors porten el seu error.",
+    mes: "Més exemples",
+    llavor: (s: number) => `llavor ${s}`,
+    valid: "vàlid",
+    invalid: "invàlid",
+    error: "error aquí",
+    nivell: (n: number) => `nivell ${n}`,
   },
   errors: {
     xarxa: "No hi ha connexió amb el servidor. Torna-ho a provar.",
