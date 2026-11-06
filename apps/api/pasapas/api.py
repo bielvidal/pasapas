@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from . import VERSION
 from .db import auto_initdb
-from .routers import admin, auth, sync
+from .routers import admin, auth, content, sync
 
 
 @asynccontextmanager
@@ -42,3 +42,4 @@ def health():
 app.include_router(auth.router)
 app.include_router(sync.router)
 app.include_router(admin.router)
+app.include_router(content.router)

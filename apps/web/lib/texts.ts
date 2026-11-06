@@ -75,7 +75,26 @@ export const UI = {
   },
   admin: {
     titol: "Administració",
-    tabs: { convidats: "Convidats", usuaris: "Usuaris" } as Record<string, string>,
+    tabs: { convidats: "Convidats", usuaris: "Usuaris", textos: "Textos" } as Record<
+      string,
+      string
+    >,
+    textos: {
+      intro:
+        "Tots els textos que veu l'alumna. Un esborrany només el veus tu (també a Revisió); en aprovar-lo, ella el rep a la pròxima sincronització. «Torna a l'original» esborra l'edició.",
+      grups: { tag: "Errors", bloc: "Blocs", template: "Plantilles" } as Record<string, string>,
+      cerca: "Cerca…",
+      editats: (n: number) => (n === 1 ? "1 text editat" : `${n} textos editats`),
+      massa: "Hi ha més textos: afina la cerca.",
+      buit: "Cap text coincideix.",
+      estat: { esborrany: "esborrany", aprovat: "aprovat" } as Record<string, string>,
+      original: "Original",
+      ajuda:
+        "Matemàtiques entre $…$ (LaTeX), negreta amb **…**. Els [[paràmetres]] s'han de conservar.",
+      desaEsborrany: "Desa com a esborrany",
+      aprova: "Aprova",
+      tornaOriginal: "Torna a l'original",
+    },
     convidats: {
       intro:
         "Només poden entrar els correus d'aquesta llista (i el tutor). L'àlies és el nom que veurà a l'app.",

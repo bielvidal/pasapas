@@ -3,6 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { api, ApiError, type Me } from "@/lib/api";
 import { migrateLegacy, setCurrentUser } from "@/lib/db";
+import { applyCachedOverrides } from "@/lib/overrides";
 import {
   cachedMeSnapshot,
   cacheMe,
@@ -65,10 +66,15 @@ export function AuthGate({ children }: { children: ReactNode }) {
 
   // Usuari conegut: BD local del seu compte, migració de la fase 1 i sync.
   const userId = effective?.id ?? null;
+  const [readyFor, setReadyFor] = useState<number | null>(null);
   useEffect(() => {
     if (userId === null) return;
     setCurrentUser(userId);
-    void migrateLegacy(userId).then(() => syncAll());
+    void migrateLegacy(userId)
+      .then(() => applyCachedOverrides())
+      .catch(() => 0)
+      .then(() => setReadyFor(userId))
+      .then(() => syncAll());
     const onOnline = () => scheduleSync(500);
     window.addEventListener("online", onOnline);
     return () => window.removeEventListener("online", onOnline);
@@ -79,7 +85,11 @@ export function AuthGate({ children }: { children: ReactNode }) {
   }, [effective, offline, isPublic, router]);
 
   if (isPublic) return <>{children}</>;
-  if (effective === undefined || (effective === null && !offline)) {
+  if (
+    effective === undefined ||
+    (effective === null && !offline) ||
+    (effective && readyFor !== effective.id)
+  ) {
     return (
       <Frame nav={false}>
         <p className="text-soft">{UI.carregant}</p>

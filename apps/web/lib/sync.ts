@@ -6,6 +6,7 @@
 import type { Attempt } from "@pasapas/engine";
 import { api, ApiError, post } from "./api";
 import { db, type LocalAttempt } from "./db";
+import { refreshOverrides } from "./overrides";
 
 const BATCH = 400;
 const CURSOR_KEY = "cursor";
@@ -87,6 +88,7 @@ export function syncAll(): Promise<SyncResult | null> {
       if (typeof navigator !== "undefined" && navigator.onLine === false) return null;
       const pushed = await pushPending();
       const pulled = await pullNew();
+      await refreshOverrides().catch(() => null);
       return { pushed, pulled };
     } catch (e) {
       if (e instanceof ApiError && (e.offline || e.status === 401)) return null;

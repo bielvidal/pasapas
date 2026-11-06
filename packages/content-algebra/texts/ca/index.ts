@@ -10,6 +10,8 @@ export { B4_TEXTS } from "./B4";
 export { B6_TEXTS } from "./B6";
 export { B7_TEXTS } from "./B7";
 export { COMU } from "./comu";
+export { listTexts, applyOverrides, currentOverrides } from "./overrides";
+export type { TextEntry } from "./overrides";
 
 /** Substitueix els [[param]] d'un text pels valors donats. Llança si en falta algun. */
 export function fill(text: string, params: Record<string, string | number | bigint>): string {

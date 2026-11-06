@@ -13,10 +13,11 @@ import {
   type InvitationRow,
   type UserRow,
 } from "@/lib/api";
+import { Textos } from "@/components/admin/Textos";
 import { useMe } from "@/lib/session";
 import { ago, UI } from "@/lib/texts";
 
-type Tab = "convidats" | "usuaris";
+type Tab = "convidats" | "usuaris" | "textos";
 
 export default function Admin() {
   const { me } = useMe();
@@ -41,7 +42,13 @@ export default function Admin() {
           </button>
         ))}
       </div>
-      {tab === "convidats" ? <Invitations /> : <Users meId={me.id} />}
+      {tab === "convidats" ? (
+        <Invitations />
+      ) : tab === "usuaris" ? (
+        <Users meId={me.id} />
+      ) : (
+        <Textos />
+      )}
     </div>
   );
 }

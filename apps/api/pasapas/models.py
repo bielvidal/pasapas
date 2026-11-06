@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, BigInteger, Boolean, DateTime, ForeignKey, Index, Integer, String, TypeDecorator
+from sqlalchemy import JSON, BigInteger, Boolean, DateTime, ForeignKey, Index, Integer, String, Text, TypeDecorator
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -146,3 +146,13 @@ class Attempt(Base):
 Index("ix_attempts_user_block_created", Attempt.user_id, Attempt.block, Attempt.client_created_at)
 Index("ix_attempts_user_tag", Attempt.user_id, Attempt.error_tag)
 Index("ix_attempts_user_received", Attempt.user_id, Attempt.received_at)
+
+
+class ContentOverride(Base):
+    """Text editat des del panell (fase 4). `state`: esborrany (només el veu el tutor) o aprovat."""
+
+    __tablename__ = "content_overrides"
+    key: Mapped[str] = mapped_column(String(200), primary_key=True)
+    text_ca: Mapped[str] = mapped_column(Text)
+    state: Mapped[str] = mapped_column(String(20), default="esborrany")
+    updated_at: Mapped[datetime] = mapped_column(TZDateTime, default=now)
