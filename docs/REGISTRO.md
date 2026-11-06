@@ -168,7 +168,7 @@ decisiones cuando Biel las valide.
    2000 semillas). Catálogo actualizado con las 11 entradas. CONTENT_VERSION 0.3.0, web 0.4.0.
 
 **Pendiente de Biel:** `sudo systemctl restart pasapas-web`; revisar textos (ahora también desde la
-app) y D22. **Siguiente:** feedback de uso; fase 5 (tras 21/11) según el brief.
+app) y D22. **Siguiente:** feedback de uso. La fase 5 (motor compartido con PPER) queda eliminada por decisión de Biel (D5).
 
 **Pendiente histórico de S1:**
 

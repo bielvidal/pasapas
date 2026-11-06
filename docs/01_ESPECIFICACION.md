@@ -278,9 +278,10 @@ El rol `student` solo ve sus propios datos. El `tutor` ve los de la alumna. No h
 | **2. Backend y sincronización** | `apps/api`, PostgreSQL, sync idempotente, usuarios y roles. | Intentos del móvil visibles desde otro dispositivo; backup verificado (restaurar en una BD de prueba) |
 | **3. Bloques B3 y B7, después B1, B2, B4, B6** | Contenido completo con tests | Cobertura de todos los `error_tag` |
 | **4. Panel y edición de textos** | Panel tutor + «El meu progrés» + `content_overrides` con estados BORRADOR/APROBADO | Biel ve los patrones de error de las últimas semanas |
-| **5. (tras 21/11)** | Evaluar extracción del motor compartido con PPER | Decisión documentada |
 
 **POSICIÓN:** el orden de los bloques tras el prototipo se ajusta según el feedback de la alumna.
+
+*(La antigua fase 5, «evaluar un motor compartido con PPER», se eliminó el 2026-11-06: no se comparte nada con PPER y las apps vivirán seguramente en máquinas distintas; ver D5 en DECISIONES.)*
 
 ---
 

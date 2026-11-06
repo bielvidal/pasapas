@@ -121,5 +121,5 @@ còpia verificada). Fase 3 (2026-11-06): els 7 blocs complets.
 Fase 4 (2026-11-06): edició de textos sense desplegar (`content_overrides`, pestanya Textos a
 Administració; `texts/ca/overrides.ts` + `apps/web/lib/overrides.ts`), panell ampliat i 11 plantilles
 més (59 en total). Pendent de Biel: publicar (`sudo systemctl restart pasapas-web`), revisar textos
-des de l'app i D22. Fase 5 (després del 21/11): avaluar motor compartit amb PPER.
+des de l'app i D22. No hi ha fase 5: no es comparteix res amb PPER (D5); el següent és el feedback d'ús.
 Diari de sessions a `docs/REGISTRO.md`.
