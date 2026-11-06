@@ -482,4 +482,60 @@ const T7: Template<Machine> = {
   },
 };
 
-export const B7_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7];
+// ── B7.T8 · find_error: x² − k² = 0 ────────────────────────────────────────
+const T8: Template<Machine> = {
+  id: "B7.T8",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 2,
+  generate(rng): FindErrorDraft<Machine> {
+    const k = rng.int(2, 9);
+    const k2 = k * k;
+    const diffP = Poly.from([-k2, 0, 1]);
+    const stepEq = (latex: string, lhs: RF, rhs: RF) => ({ latex, machine: eqMachine(lhs, rhs) });
+    const stepSol = (latex: string, m: Machine) => ({ latex, machine: m });
+    const s0 = stepEq(L.eq(L.prod(L.poly(lin(1, k)), L.poly(lin(1, -k))), "0"), RF.of(diffP), c(0));
+    const s1 = stepSol(L.sol(-k, k), solMachine(solOf(-k, k)));
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.6) {
+      // Diferència de quadrats com a quadrat: (x − k)² = 0 → x = k
+      steps = [
+        stepEq(L.eq(`(${L.poly(lin(1, -k))})^{2}`, "0"), RF.of(lin(1, -k).pow(2)), c(0)),
+        stepSol(L.sol(k), solMachine(solOf(k))),
+      ];
+      errorIndex = 0;
+      injectedTag = "B4_DIF_QUADRATS";
+    } else {
+      // Es queda només amb una solució
+      steps = [s0, stepSol(L.sol(k), solMachine(solOf(k)))];
+      errorIndex = 1;
+      injectedTag = "B7_SOLUCIO_INCOMPLETA";
+    }
+    const tx = T["B7.T8"];
+    return {
+      type: "find_error",
+      ...base(2, I.onEsError),
+      promptLatex: L.eq(L.poly(diffP), "0"),
+      promptMachine: eqMachine(RF.of(diffP), c(0)),
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        { k, k2 },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(steps, errorIndex, injectedTag, (i) =>
+        i === 0 ? "B4_NO_RECONEIX" : "B7_ARREL_SENSE_PM",
+      ),
+    };
+  },
+};
+
+export const B7_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8];

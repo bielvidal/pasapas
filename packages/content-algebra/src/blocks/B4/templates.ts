@@ -365,4 +365,70 @@ const T6: Template<Machine> = {
   },
 };
 
-export const B4_TEMPLATES: Template<Machine>[] = [T1, T2, T2b, T3, T4, T5, T6];
+// ── B4.T7 · find_error: g·x² − 2gk·x + gk² = g(x − k)² ─────────────────────
+const T7: Template<Machine> = {
+  id: "B4.T7",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 3,
+  generate(rng): FindErrorDraft<Machine> {
+    const g = rng.int(2, 5);
+    const k = rng.int(2, 6);
+    const inner = sq(lin(1, -k)); // x² − 2kx + k²
+    const prompt = inner.scale(g);
+    const step = (latex: string, p: Poly) => ({ latex, machine: rfMachine(RF.of(p)) });
+    const s0 = step(`${g}(${L.poly(inner)})`, prompt);
+    const s1 = step(`${g}${pw2(L.poly(lin(1, -k)))}`, prompt);
+    const s2 = step(L.poly(prompt), prompt); // comprovació desenvolupant
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1, s2];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.6) {
+      // El k² mal dividit: g(x² − 2kx + k); la comprovació desenvolupant ho fa coherent
+      const bad = Poly.from([k, -2 * k, 1]).scale(g);
+      steps = [step(`${g}(${L.poly(Poly.from([k, -2 * k, 1]))})`, bad), step(L.poly(bad), bad)];
+      errorIndex = 0;
+      injectedTag = "B4_FACTOR_COMU_INCOMPLET";
+    } else {
+      // Oblida el 2 del doble producte: g(x − 2k)²
+      const bad = sq(lin(1, -2 * k)).scale(g);
+      steps = [s0, step(`${g}${pw2(L.poly(lin(1, -2 * k)))}`, bad), step(L.poly(bad), bad)];
+      errorIndex = 1;
+      injectedTag = "B4_DOBLE_PRODUCTE";
+    }
+    const tx = T["B4.T7"];
+    return {
+      type: "find_error",
+      ...base(3, I.onEsError),
+      promptLatex: L.poly(prompt),
+      promptMachine: rfMachine(RF.of(prompt)),
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        {
+          g,
+          k,
+          dk: 2 * k,
+          k2: k * k,
+          g2k: 2 * g * k,
+          gk2: g * k * k,
+        },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(
+        steps,
+        errorIndex,
+        injectedTag,
+        (i) => ["B4_FACTOR_COMU_INCOMPLET", "B4_NO_RECONEIX", "B4_DOBLE_PRODUCTE"][i]!,
+      ),
+    };
+  },
+};
+
+export const B4_TEMPLATES: Template<Machine>[] = [T1, T2, T2b, T3, T4, T5, T6, T7];

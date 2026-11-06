@@ -42,4 +42,15 @@ export const B2_TEXTS = {
     explicacioSenseError:
       "Tots els passos són correctes: s'amplifica numerador i denominador, se sumen només els numeradors, l'enter multiplica només el numerador i es simplifica al final.",
   },
+  "B2.T7": {
+    explicacioCorrecta:
+      "Denominador comú $[[L]]$: cada fracció s'amplifica multiplicant numerador i denominador pel mateix número: $\\frac{[[a]]}{[[b]]} = \\frac{[[aL]]}{[[L]]}$ i $\\frac{[[c]]}{[[d]]} = \\frac{[[cL]]}{[[L]]}$.",
+  },
+  "B2.T8": {
+    enunciat: "Calcula $[[k]] - \\frac{[[a]]}{[[b]]}$",
+    explicacioCorrecta:
+      "Escriu $[[k]]$ amb denominador $[[b]]$: $[[k]] = \\frac{[[kb]]}{[[b]]}$. Resta els numeradors i deixa el denominador: $\\frac{[[kb]] - [[a]]}{[[b]]} = \\frac{[[n]]}{[[b]]}$.",
+    explicacioSenseError:
+      "Tots els passos són correctes: l'enter es converteix en fracció amb el mateix denominador i es resten només els numeradors.",
+  },
 } as const;

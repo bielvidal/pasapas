@@ -23,7 +23,7 @@ export {
 };
 
 /** Versió del contingut (es desa a cada intent). Pujar-la quan canviï qualsevol plantilla o text. */
-export const CONTENT_VERSION = "0.2.0";
+export const CONTENT_VERSION = "0.3.0";
 
 export const ALL_TEMPLATES: Template<Machine>[] = [
   ...B1_TEMPLATES,

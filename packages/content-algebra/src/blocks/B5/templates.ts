@@ -10,6 +10,7 @@ import { B5_TEXTS, fill } from "../../../texts/ca";
 import { fmt, Poly, Q, RF } from "../../math";
 import type { AlgOption, Machine } from "../../machine";
 import { optNoSimplifica, optReason, optRF, rfMachine } from "../../machine";
+import { findErrorOptions } from "../common";
 
 const T = B5_TEXTS;
 const BLOCK = "B5";
@@ -448,6 +449,104 @@ const T9: Template<Machine> = {
   },
 };
 
-export const B5_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8, T9];
+// ── B5.T10 · next_step: primer pas per simplificar (x² + kx)/(x² − k²) ──────
+const T10: Template<Machine> = {
+  id: "B5.T10",
+  version: 1,
+  block: BLOCK,
+  type: "next_step",
+  level: 2,
+  generate(rng): McDraft<Machine> {
+    const k = rng.int(2, 9);
+    const numP = Poly.from([0, k, 1]);
+    const denP = Poly.from([-k * k, 0, 1]);
+    const prompt = RF.of(numP, denP);
+    const xpk = L.poly(lin(1, k));
+    const xmk = L.poly(lin(1, -k));
+    return {
+      type: "next_step",
+      ...base(2, T.instruccions.quinPas),
+      promptLatex: L.frac(L.poly(numP), L.poly(denP)),
+      promptMachine: rfMachine(prompt),
+      explanationCorrect: fill(T.plantilles["B5.T10"].explicacioCorrecta, { k, k2: k * k }),
+      options: [
+        optRF("a", prompt, L.frac(L.prod("x", xpk), L.prod(xpk, xmk)), null),
+        optRF(
+          "b",
+          RF.of(Poly.X.mul(lin(1 + k, 0)), denP),
+          L.frac(L.prod("x", `x + ${k}x`), L.prod(xpk, xmk)),
+          "B4_FACTOR_COMU_INCOMPLET",
+        ),
+        optRF(
+          "c",
+          RF.of(numP, lin(1, -k).pow(2)),
+          L.frac(L.prod("x", xpk), `(${xmk})^{2}`),
+          "B4_DIF_QUADRATS",
+        ),
+        optRF("d", RF.of(lin(1, k), denP), L.frac(xpk, L.poly(denP)), "B5_CANCELA_TERME"),
+      ],
+    };
+  },
+};
+
+// ── B5.T11 · find_error: (kx + k²)/(x² + kx) ────────────────────────────────
+const T11: Template<Machine> = {
+  id: "B5.T11",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 3,
+  generate(rng): FindErrorDraft<Machine> {
+    const k = rng.int(2, 7);
+    const numP = lin(k, k * k);
+    const denP = Poly.from([0, k, 1]);
+    const prompt = RF.of(numP, denP);
+    const xpk = L.poly(lin(1, k));
+    const step = (latex: string, rf: RF) => ({ latex, machine: rfMachine(rf) });
+    const s0 = step(L.frac(L.prod(String(k), xpk), L.prod("x", xpk)), prompt);
+    const s1 = step(L.frac(String(k), "x"), RF.of(k, Poly.X));
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.6) {
+      // Factor comú mal dividit al numerador: k(x + 1); després ja no es pot tatxar res
+      const bad = RF.of(lin(k, k), denP);
+      steps = [
+        step(L.frac(L.prod(String(k), L.poly(lin(1, 1))), L.prod("x", xpk)), bad),
+        step(L.frac(L.poly(lin(k, k)), L.prod("x", xpk)), bad),
+      ];
+      errorIndex = 0;
+      injectedTag = "B4_FACTOR_COMU_INCOMPLET";
+    } else {
+      // Tatxa el factor equivocat: queda (x + k)/x
+      steps = [s0, step(L.frac(xpk, "x"), RF.of(lin(1, k), Poly.X))];
+      errorIndex = 1;
+      injectedTag = "B5_FACTOR_ERRONI";
+    }
+    const tx = T.plantilles["B5.T11"];
+    return {
+      type: "find_error",
+      ...base(3, T.instruccions.onEsError),
+      promptLatex: L.frac(L.poly(numP), L.poly(denP)),
+      promptMachine: rfMachine(prompt),
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        { k, k2: k * k },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(steps, errorIndex, injectedTag, (i) =>
+        i === 0 ? "B5_NO_FACTORITZA" : "B5_NO_TATXA_FACTOR",
+      ),
+    };
+  },
+};
+
+export const B5_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11];
 
 export type { ItemDraft };

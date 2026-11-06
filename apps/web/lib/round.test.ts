@@ -63,6 +63,6 @@ describe("ronda", () => {
     expect(s.total).toBe(3);
     expect(s.correct).toBe(1);
     expect(s.chosen.length).toBeGreaterThan(0);
-    expect(attempts[0]!.contentVersion).toBe("0.2.0");
+    expect(attempts[0]!.contentVersion).toBe("0.3.0");
   });
 });

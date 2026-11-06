@@ -76,4 +76,11 @@ export const B7_TEXTS = {
     explicacioSenseError:
       "Tots els passos són correctes: no s'ha dividit per $x$ (es treu factor comú), i l'arrel quadrada dona les dues solucions.",
   },
+  "B7.T8": {
+    enunciat: "Resol $x^2 - [[k2]] = 0$",
+    explicacioCorrecta:
+      "$x^2 - [[k2]]$ és una diferència de quadrats: $(x + [[k]])(x - [[k]]) = 0$. Un producte val 0 si un factor val 0: $x = -[[k]]$ o $x = [[k]]$. Les dues són solucions.",
+    explicacioSenseError:
+      "Tots els passos són correctes: diferència de quadrats ben factoritzada i les dues solucions del producte.",
+  },
 } as const;

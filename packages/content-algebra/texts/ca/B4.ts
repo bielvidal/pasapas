@@ -51,6 +51,13 @@ export const B4_TEXTS = {
     explicacioSenseError:
       "Tots els passos són correctes: factor comú ben dividit i diferència de quadrats com a suma per diferència.",
   },
+  "B4.T7": {
+    enunciat: "Factoritza completament $[[g]]x^2 - [[g2k]]x + [[gk2]]$",
+    explicacioCorrecta:
+      "Factor comú $[[g]]$ a tots els termes: $[[g]](x^2 - [[dk]]x + [[k2]])$ (comprova: $[[g]] \\cdot [[k2]] = [[gk2]]$). Dins hi ha un quadrat perfecte: $x^2 - 2 \\cdot [[k]] \\cdot x + [[k]]^2 = (x - [[k]])^2$. Desenvolupant es torna a l'inici.",
+    explicacioSenseError:
+      "Tots els passos són correctes: factor comú ben dividit, quadrat perfecte reconegut i comprovació desenvolupant.",
+  },
   "B4.T6": {
     explicacioCorrecta:
       "El factor comú als dos termes és $[[g]]$ (la $x$ no és al segon terme). Després, $x^2 - [[k2]]$ encara es pot factoritzar: $[[g]](x + [[k]])(x - [[k]])$.",

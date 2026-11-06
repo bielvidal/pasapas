@@ -266,4 +266,97 @@ const T6: Template<Machine> = {
   },
 };
 
-export const B1_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6];
+// ── B1.T7 · next_step: a − b(c − d) ────────────────────────────────────────
+const T7: Template<Machine> = {
+  id: "B1.T7",
+  version: 1,
+  block: BLOCK,
+  type: "next_step",
+  level: 2,
+  generate(rng): McDraft<Machine> {
+    const a = rng.int(2, 9);
+    const b = rng.int(2, 9);
+    const cc = rng.int(2, 9);
+    const d = intExcept(rng, 2, 9, cc);
+    const r = a - b * (cc - d);
+    return {
+      type: "next_step",
+      ...base(2, I.quinPas),
+      promptLatex: `${a} - ${b}(${L.poly(Poly.constant(cc))} - ${d})`,
+      promptMachine: rfMachine(c(r)),
+      explanationCorrect: fill(T["B1.T7"].explicacioCorrecta, {
+        a,
+        b,
+        c: cc,
+        d,
+        bc: b * cc,
+        bd: b * d,
+      }),
+      options: [
+        optRF("a", c(r), `${a} - (${b * cc} - ${b * d})`, null),
+        optRF("b", c(a - b * cc - b * d), `${a} - ${b * cc} - ${b * d}`, "B1_SIGNE_PARCIAL"),
+        optRF("c", c(a - b * cc + d), `${a} - ${b * cc} + ${d}`, "B1_DISTRIB_PARCIAL"),
+        optRF("d", c((a - b) * (cc - d)), `(${a} - ${b})(${cc} - ${d})`, "B1_ORDRE_OPERACIONS"),
+      ],
+    };
+  },
+};
+
+// ── B1.T8 · find_error: −n² + m·p ───────────────────────────────────────────
+const T8: Template<Machine> = {
+  id: "B1.T8",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 2,
+  generate(rng): FindErrorDraft<Machine> {
+    const n = rng.int(3, 6); // amb n = 2, «−2n» coincidiria amb −n²
+    const m = rng.int(2, 9);
+    const p = rng.int(2, 9);
+    const n2 = n * n;
+    const mp = m * p;
+    const step = (latex: string, v: number) => ({ latex, machine: rfMachine(c(v)) });
+    const s0 = step(`-${n2} + ${mp}`, mp - n2);
+    const s1 = step(String(mp - n2), mp - n2);
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.47) {
+      steps = [step(`${n2} + ${mp}`, n2 + mp), step(String(n2 + mp), n2 + mp)];
+      errorIndex = 0;
+      injectedTag = "B1_QUADRAT_NEGATIU";
+    } else if (roll < 0.74) {
+      steps = [step(`-${2 * n} + ${mp}`, mp - 2 * n), step(String(mp - 2 * n), mp - 2 * n)];
+      errorIndex = 0;
+      injectedTag = "B1_QUADRAT_DOBLE";
+    } else {
+      const v = (m - n2) * p;
+      steps = [step(`(-${n2} + ${m}) \\cdot ${p}`, v), step(String(v), v)];
+      errorIndex = 0;
+      injectedTag = "B1_ORDRE_OPERACIONS";
+    }
+    const tx = T["B1.T8"];
+    return {
+      type: "find_error",
+      ...base(2, I.onEsError),
+      promptLatex: `-${n}^{2} + ${m} \\cdot ${p}`,
+      promptMachine: rfMachine(c(mp - n2)),
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        { n, m, p, n2, mp, r: mp - n2 },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(steps, errorIndex, injectedTag, (i) =>
+        i === 0 ? "B1_QUADRAT_NEGATIU" : "B1_ORDRE_OPERACIONS",
+      ),
+    };
+  },
+};
+
+export const B1_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8];

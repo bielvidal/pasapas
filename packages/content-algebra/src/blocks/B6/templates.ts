@@ -502,4 +502,62 @@ const T6: Template<Machine> = {
   },
 };
 
-export const B6_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6];
+// ── B6.T7 · find_error: (x + p)/a = c ──────────────────────────────────────
+const T7: Template<Machine> = {
+  id: "B6.T7",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 2,
+  generate(rng): FindErrorDraft<Machine> {
+    const a = rng.int(2, 6);
+    const cc = rng.int(1, 5);
+    const p = rng.int(1, 9);
+    const s = a * cc - p;
+    const xp = lin(1, p);
+    const prompt = eqMachine(RF.of(xp, a), c(cc));
+    const step = (latex: string, lhs: RF, rhs: RF) => ({ latex, machine: eqMachine(lhs, rhs) });
+    const s0 = step(L.eq(L.poly(xp), String(a * cc)), RF.of(xp), c(a * cc));
+    const s1 = step(L.sol(s), X, c(s));
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.6) {
+      // «Treu» el denominador sense multiplicar: x + p = c
+      steps = [
+        step(L.eq(L.poly(xp), String(cc)), RF.of(xp), c(cc)),
+        step(L.sol(cc - p), X, c(cc - p)),
+      ];
+      errorIndex = 0;
+      injectedTag = "B6_TREU_DENOMINADORS";
+    } else {
+      // El p passa sense canviar de signe
+      steps = [s0, step(L.sol(a * cc + p), X, c(a * cc + p))];
+      errorIndex = 1;
+      injectedTag = "B6_TRANSPOSICIO_SIGNE";
+    }
+    const tx = T["B6.T7"];
+    return {
+      type: "find_error",
+      ...base(2, I.onEsError),
+      promptLatex: L.eq(fr(L.poly(xp), a), String(cc)),
+      promptMachine: prompt,
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        { a, p, c: cc, ac: a * cc, s },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(steps, errorIndex, injectedTag, (i) =>
+        i === 0 ? "B6_MCM_PARCIAL" : "B6_DESPEJA_MAL",
+      ),
+    };
+  },
+};
+
+export const B6_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7];

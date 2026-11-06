@@ -9,6 +9,7 @@ export const B5_TEXTS = {
     esValid: "És vàlid aquest pas?",
     perQue: "Per què?",
     onEsError: "On és l'error?",
+    quinPas: "Quin és el pas següent correcte?",
   },
   /** Opcions de text pla. */
   opcions: {
@@ -67,6 +68,17 @@ export const B5_TEXTS = {
         "$x^2 - [[k2]] = (x + [[k]])(x - [[k]])$ i $x^2 + [[k]]x = x(x + [[k]])$. Es tatxa el factor $(x + [[k]])$ i queda $\\frac{x - [[k]]}{x}$, que ja no es pot simplificar més: la $x$ de dalt està restant.",
       explicacioSenseError:
         "Tots els passos són correctes: es factoritza bé, es tatxa un factor comú i el resultat ja no es pot simplificar.",
+    },
+    "B5.T10": {
+      explicacioCorrecta:
+        "Abans de tatxar res, factoritza: $x^2 + [[k]]x = x(x + [[k]])$ i $x^2 - [[k2]] = (x + [[k]])(x - [[k]])$. Ara sí que es veu el factor comú $(x + [[k]])$.",
+    },
+    "B5.T11": {
+      enunciat: "Simplifica $\\frac{[[k]]x + [[k2]]}{x^2 + [[k]]x}$",
+      explicacioCorrecta:
+        "Numerador: $[[k]]x + [[k2]] = [[k]](x + [[k]])$. Denominador: $x^2 + [[k]]x = x(x + [[k]])$. Es tatxa el factor $(x + [[k]])$ i queda $\\frac{[[k]]}{x}$.",
+      explicacioSenseError:
+        "Tots els passos són correctes: factor comú a dalt i a baix, i es tatxa el factor que coincideix.",
     },
   },
 } as const;

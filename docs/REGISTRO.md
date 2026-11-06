@@ -151,6 +151,25 @@ sin errores, 247 TS en total.
 web 0.3.0, contenido 0.2.0). Corregir el catálogo (`02_CATALOGO_CONTENIDO.md`) con estas
 decisiones cuando Biel las valide.
 
+## S4 · 2026-11-06 · Fase 4: edición de textos, panel ampliado y contenido extra
+
+1. **Edición de textos sin desplegar** (`content_overrides`, §6): API (tabla, `GET /api/content/overrides`
+   —el tutor recibe también los borradores, la alumna solo los aprobados—, `PUT/DELETE
+   /api/admin/content/overrides/{key}`), claves estables `tag:X:nom|explicacio`, `bloc:ID:titol|reglaOr`,
+   `template:ID:camí.amb.punts` (`listTexts`/`applyOverrides` en `texts/ca/overrides.ts`). La web aplica
+   los textos cacheados antes de renderizar (offline) y los refresca en cada sync; pestaña **Textos** en
+   Administració (buscar, esborrany, aprova, torna a l'original). El tutor ve los borradores aplicados
+   en Revisió. API redesplegada (0.3.0).
+2. **Panel ampliado** (`/progres`, misma vista alumna/tutor): ventana 4/8/12 semanas, filtro por bloque,
+   resumen (intentos, bien resueltos, saltados), nivel actual y por niveles de cada bloque, «els que més
+   es repeteixen», errores activos con «últim cop», «superats en aquestes setmanes», días activos.
+3. **Contenido extra del catálogo**: `next_step` B1.T7, B2.T7, B3.T9, B5.T10 y segundo `find_error`
+   B1.T8, B2.T8, B3.T10, B4.T7, B5.T11, B6.T7, B7.T8 (59 plantillas; 207 tests de bloque, también con
+   2000 semillas). Catálogo actualizado con las 11 entradas. CONTENT_VERSION 0.3.0, web 0.4.0.
+
+**Pendiente de Biel:** `sudo systemctl restart pasapas-web`; revisar textos (ahora también desde la
+app) y D22. **Siguiente:** feedback de uso; fase 5 (tras 21/11) según el brief.
+
 **Pendiente histórico de S1:**
 
 1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).

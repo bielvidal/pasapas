@@ -40,4 +40,15 @@ export const B1_TEXTS = {
     explicacioSenseError:
       "Tots els passos són correctes: es distribueix bé el $[[k]]$, el menys canvia els dos signes del segon parèntesi i s'ajunten els termes semblants.",
   },
+  "B1.T7": {
+    explicacioCorrecta:
+      "Primer el parèntesi multiplicat: $[[b]]([[c]] - [[d]]) = [[bc]] - [[bd]]$. Com que davant hi ha un menys, es queda entre parèntesis: $[[a]] - ([[bc]] - [[bd]])$. Després el menys canvia els dos signes.",
+  },
+  "B1.T8": {
+    enunciat: "Calcula $-[[n]]^2 + [[m]] \\cdot [[p]]$",
+    explicacioCorrecta:
+      "L'exponent afecta només el $[[n]]$: $-[[n]]^2 = -[[n2]]$. La multiplicació va abans que la suma: $[[m]] \\cdot [[p]] = [[mp]]$. Al final, $-[[n2]] + [[mp]] = [[r]]$.",
+    explicacioSenseError:
+      "Tots els passos són correctes: el quadrat només afecta el número, la multiplicació es fa abans de sumar.",
+  },
 } as const;

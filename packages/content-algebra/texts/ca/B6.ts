@@ -58,4 +58,11 @@ export const B6_TEXTS = {
     explicacioSenseError:
       "Tots els passos són correctes: m.c.m. a tots els termes, parèntesi ben tret, canvi de signe en passar de costat i divisió pel coeficient.",
   },
+  "B6.T7": {
+    enunciat: "Resol $\\frac{x + [[p]]}{[[a]]} = [[c]]$",
+    explicacioCorrecta:
+      "El $[[a]]$ divideix tot el numerador: passa a l'altre costat multiplicant, $x + [[p]] = [[ac]]$. Després el $[[p]]$ passa restant: $x = [[ac]] - [[p]] = [[s]]$.",
+    explicacioSenseError:
+      "Tots els passos són correctes: el denominador passa multiplicant i el terme que suma passa restant.",
+  },
 } as const;

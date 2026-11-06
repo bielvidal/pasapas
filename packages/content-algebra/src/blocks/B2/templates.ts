@@ -352,4 +352,111 @@ const T6: Template<Machine> = {
   },
 };
 
-export const B2_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6];
+// ── B2.T7 · next_step: a/b − c/d → amplificar ──────────────────────────────
+const T7: Template<Machine> = {
+  id: "B2.T7",
+  version: 1,
+  block: BLOCK,
+  type: "next_step",
+  level: 2,
+  generate(rng): McDraft<Machine> {
+    const b = rng.int(2, 9);
+    const d = intExcept(rng, 2, 9, b);
+    const a = rng.int(1, b - 1);
+    const cc = rng.int(1, d - 1);
+    const Lc = mcm(b, d);
+    const aL = a * (Lc / b);
+    const cL = cc * (Lc / d);
+    const v = q(a, b).sub(q(cc, d));
+    return {
+      type: "next_step",
+      ...base(2, I.quinPas),
+      promptLatex: `${fr(a, b)} - ${fr(cc, d)}`,
+      promptMachine: rfMachine(c(v)),
+      explanationCorrect: fill(T["B2.T7"].explicacioCorrecta, { a, b, c: cc, d, L: Lc, aL, cL }),
+      options: [
+        optRF("a", c(v), `${fr(aL, Lc)} - ${fr(cL, Lc)}`, null),
+        optRF(
+          "b",
+          c(q(a - cc, Lc)),
+          `${fr(a, Lc)} - ${fr(cc, Lc)}`,
+          "B2_AMPLIFICA_NOMES_DENOMINADOR",
+        ),
+        optRF(
+          "c",
+          c(q(a - cc, b - d)),
+          L.frac(`${a} - ${cc}`, `${b} - ${d}`),
+          "B2_SUMA_DENOMINADORS",
+        ),
+        optRF("d", c(q(a * cc, b * d)), fr(a * cc, b * d), "B2_OPERACIO_CONFOSA"),
+      ],
+    };
+  },
+};
+
+// ── B2.T8 · find_error: k − a/b ─────────────────────────────────────────────
+const T8: Template<Machine> = {
+  id: "B2.T8",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 2,
+  generate(rng): FindErrorDraft<Machine> {
+    const k = rng.int(2, 5);
+    const b = rng.int(2, 9);
+    const a = rng.int(1, b - 1);
+    const n = k * b - a;
+    const total = q(n, b);
+    const step = (latex: string, v: Q) => ({ latex, machine: rfMachine(c(v)) });
+    const reduceStep = (num: number, den: number) =>
+      mcd(num, den) === 1 ? [] : [step(L.num(q(num, den)), q(num, den))];
+    const s0 = step(`${fr(k * b, b)} - ${fr(a, b)}`, total);
+    const s1 = step(fr(n, b), total);
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1, ...reduceStep(n, b)];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.6) {
+      // l'enter només al numerador: k/b − a/b
+      const v = q(k - a, b);
+      steps = [
+        step(`${fr(k, b)} - ${fr(a, b)}`, v),
+        step(fr(k - a, b), v),
+        ...reduceStep(k - a, b),
+      ];
+      errorIndex = 0;
+      injectedTag = "B2_ENTER_SENSE_DENOMINADOR";
+    } else {
+      // resta també els denominadors... que són iguals: b − b = 0 no té sentit; suma'ls: 2b
+      const v = q(n, 2 * b);
+      steps = [s0, step(fr(n, 2 * b), v), ...reduceStep(n, 2 * b)];
+      errorIndex = 1;
+      injectedTag = "B2_SUMA_DENOMINADORS";
+    }
+    const tx = T["B2.T8"];
+    return {
+      type: "find_error",
+      ...base(2, I.onEsError),
+      promptLatex: `${k} - ${fr(a, b)}`,
+      promptMachine: rfMachine(c(total)),
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        { k, a, b, kb: k * b, n },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(
+        steps,
+        errorIndex,
+        injectedTag,
+        (i) => ["B2_ENTER_SENSE_DENOMINADOR", "B2_SUMA_DENOMINADORS", "B2_SIMPLIFICA_SUMA"][i]!,
+      ),
+    };
+  },
+};
+
+export const B2_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8];

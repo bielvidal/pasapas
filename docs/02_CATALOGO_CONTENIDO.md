@@ -542,4 +542,28 @@
 B3.T5, B4.T2/T2b, B4.T5, B7.T5, B7.T7) están listadas en `REGISTRO.md` S3 y pendientes de que Biel
 las confirme (D22); entonces se corrige aquí.
 
-**Pendent de contingut (fase 4, no bloqueja):** més `next_step` a B1, B2, B3 i B5; un segon `find_error` per bloc. Proposar-los amb el mateix format quan el motor estigui fet.
+## Plantilles afegides a la fase 4 (2026-11-06)
+
+Proposades i implementades amb el mateix format. Textos a revisar per Biel (`texts/ca/`).
+
+**B1.T7** · `next_step` · nivell 2 — Paràmetres: a, b, c, d ∈ [2..9], c ≠ d. Enunciat: «a − b(c − d). Quin és el pas següent correcte?» Correcta: a − (bc − bd). Distractors: a − bc − bd → `B1_SIGNE_PARCIAL` · a − bc + d → `B1_DISTRIB_PARCIAL` · (a − b)(c − d) → `B1_ORDRE_OPERACIONS`.
+
+**B1.T8** · `find_error` · nivell 2 — Paràmetres: n ∈ [3..6], m, p ∈ [2..9]. Resolució de «Calcula −n² + m·p»: 1. −n² + mp (calculats) — *errors possibles:* n² + mp → `B1_QUADRAT_NEGATIU` · −2n + mp → `B1_QUADRAT_DOBLE` · (−n² + m)·p → `B1_ORDRE_OPERACIONS`; 2. resultat.
+
+**B2.T7** · `next_step` · nivell 2 — Paràmetres: b, d ∈ [2..9], b ≠ d; a ∈ [1..b−1], c ∈ [1..d−1]; L = mcm(b, d). Enunciat: «a/b − c/d. Quin és el pas següent?» Correcta: (aL/b)/L − (cL/d)/L. Distractors: a/L − c/L → `B2_AMPLIFICA_NOMES_DENOMINADOR` · (a − c)/(b − d) → `B2_SUMA_DENOMINADORS` · ac/(bd) → `B2_OPERACIO_CONFOSA`.
+
+**B2.T8** · `find_error` · nivell 2 — Paràmetres: k ∈ [2..5], b ∈ [2..9], a ∈ [1..b−1]. Resolució de «Calcula k − a/b»: 1. kb/b − a/b — *error:* k/b − a/b → `B2_ENTER_SENSE_DENOMINADOR`; 2. (kb − a)/b — *error:* (kb − a)/(2b) → `B2_SUMA_DENOMINADORS`; 3. simplificar (només si cal).
+
+**B3.T9** · `next_step` · nivell 2 — Paràmetres: com B3.T1 més j ∈ [1..3]. Enunciat: «(k·xᵃ)ⁿ · xʲ. Quin és el pas següent?» Correcta: kⁿ·x^(an) · xʲ. Distractors: k·x^(an)·xʲ → `B3_COEF_NO_ELEVAT` · kⁿ·x^(a+n)·xʲ → `B3_POTENCIA_POTENCIA` · (kn)·x^(an)·xʲ → `B3_COEF_MULTIPLICAT`.
+
+**B3.T10** · `find_error` · nivell 3 — Paràmetres: a, b ∈ [1..3], n ∈ [2..3], c ∈ [1..(a+b)n−1], descartant ab = a+b, (a+b)+n = (a+b)n i (a+b)n/c = (a+b)n − c. Resolució de «Simplifica (xᵃ·xᵇ)ⁿ / xᶜ»: 1. (x^(a+b))ⁿ/xᶜ — *error:* (x^(ab))ⁿ → `B3_PRODUCTE_EXPONENTS`; 2. x^((a+b)n)/xᶜ — *error:* x^(a+b+n) → `B3_POTENCIA_POTENCIA`; 3. x^((a+b)n − c) — *error:* x^((a+b)n / c) → `B3_QUOCIENT_EXPONENTS`.
+
+**B4.T7** · `find_error` · nivell 3 — Paràmetres: g ∈ [2..5], k ∈ [2..6]. Resolució de «Factoritza completament g·x² − 2gk·x + gk²»: 1. g(x² − 2kx + k²) — *error:* g(x² − 2kx + k) → `B4_FACTOR_COMU_INCOMPLET` (el pas següent és la comprovació desenvolupant, coherent); 2. g(x − k)² — *error:* g(x − 2k)² → `B4_DOBLE_PRODUCTE`; 3. comprovació desenvolupant.
+
+**B5.T10** · `next_step` · nivell 2 — Paràmetres: k ∈ [2..9]. Enunciat: «(x² + kx)/(x² − k²). Quin és el pas següent?» Correcta: x(x + k) / ((x + k)(x − k)). Distractors: x(x + kx)/… → `B4_FACTOR_COMU_INCOMPLET` · x(x + k)/(x − k)² → `B4_DIF_QUADRATS` · (x + k)/(x² − k²) → `B5_CANCELA_TERME`.
+
+**B5.T11** · `find_error` · nivell 3 — Paràmetres: k ∈ [2..7]. Resolució de «Simplifica (kx + k²)/(x² + kx)»: 1. k(x + k) / (x(x + k)) — *error:* k(x + 1) al numerador → `B4_FACTOR_COMU_INCOMPLET` (i no es pot tatxar res); 2. k/x — *error:* (x + k)/x → `B5_FACTOR_ERRONI`.
+
+**B6.T7** · `find_error` · nivell 2 — Paràmetres: a ∈ [2..6], c ∈ [1..5], p ∈ [1..9]. Resolució de «Resol (x + p)/a = c»: 1. x + p = ac — *error:* x + p = c → `B6_TREU_DENOMINADORS`; 2. x = ac − p — *error:* x = ac + p → `B6_TRANSPOSICIO_SIGNE`.
+
+**B7.T8** · `find_error` · nivell 2 — Paràmetres: k ∈ [2..9]. Resolució de «Resol x² − k² = 0»: 1. (x + k)(x − k) = 0 — *error:* (x − k)² = 0 → `B4_DIF_QUADRATS`; 2. x = −k o x = k — *error:* x = k → `B7_SOLUCIO_INCOMPLETA`.

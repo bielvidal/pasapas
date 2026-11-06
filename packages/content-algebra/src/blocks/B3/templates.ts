@@ -493,4 +493,132 @@ const T8: Template<Machine> = {
   },
 };
 
-export const B3_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8];
+// ── B3.T9 · next_step: (k·xᵃ)ⁿ · xʲ ────────────────────────────────────────
+const T9: Template<Machine> = {
+  id: "B3.T9",
+  version: 1,
+  block: BLOCK,
+  type: "next_step",
+  level: 2,
+  generate(rng): McDraft<Machine> {
+    let k = rng.int(2, 5);
+    let a = rng.int(2, 4);
+    let n = rng.int(2, 3);
+    while (k ** n === k * n || a + n === a * n) {
+      k = rng.int(2, 5);
+      a = rng.int(2, 4);
+      n = rng.int(2, 3);
+    }
+    const j = rng.int(1, 3);
+    const prompt = mx(k ** n, a * n + j);
+    const m = (coef: number, e: number) => mx(coef, e + j);
+    const lat = (coef: number, e: number) => `${coef}x^{${e}} \\cdot x^{${j}}`;
+    return {
+      type: "next_step",
+      ...base(2, I.quinPas),
+      promptLatex: `(${k}x^{${a}})^{${n}} \\cdot x^{${j}}`,
+      promptMachine: monoMachine(prompt),
+      explanationCorrect: fill(T["B3.T9"].explicacioCorrecta, {
+        k,
+        a,
+        n,
+        j,
+        kn: k ** n,
+        an: a * n,
+      }),
+      options: [
+        optM("a", m(k ** n, a * n), null, lat(k ** n, a * n)),
+        optM("b", m(k, a * n), "B3_COEF_NO_ELEVAT", lat(k, a * n)),
+        optM("c", m(k ** n, a + n), "B3_POTENCIA_POTENCIA", lat(k ** n, a + n)),
+        optM("d", m(k * n, a * n), "B3_COEF_MULTIPLICAT", lat(k * n, a * n)),
+      ],
+    };
+  },
+};
+
+// ── B3.T10 · find_error: (xᵃ·xᵇ)ⁿ / xᶜ ─────────────────────────────────────
+const T10: Template<Machine> = {
+  id: "B3.T10",
+  version: 1,
+  block: BLOCK,
+  type: "find_error",
+  level: 3,
+  generate(rng): FindErrorDraft<Machine> {
+    let a = 1;
+    let b = 1;
+    let n = 2;
+    let cc = 1;
+    // Cap «error» pot coincidir amb el valor correcte: a·b ≠ a+b, (a+b)+n ≠ (a+b)·n, (a+b)n/c ≠ (a+b)n − c.
+    for (;;) {
+      a = rng.int(1, 3);
+      b = rng.int(1, 3);
+      n = rng.int(2, 3);
+      cc = rng.int(1, (a + b) * n - 1);
+      const e = (a + b) * n;
+      if (a * b !== a + b && a + b + n !== e && e !== (e - cc) * cc) break;
+    }
+    const prompt = mx(1, (a + b) * n - cc);
+    const step = (latex: string, m: Mono) => ({ latex, machine: monoMachine(m) });
+    const over = (num: string) => L.frac(num, L.expo("x", cc));
+    const s0 = step(over(`(${L.expo("x", a + b)})^{${n}}`), prompt);
+    const s1 = step(over(L.expo("x", (a + b) * n)), prompt);
+    const s2 = step(L.mono(prompt), prompt);
+    const roll = rng.next();
+    let steps: (typeof s0)[];
+    let errorIndex: number | null;
+    let injectedTag: string | null;
+    if (roll < 0.2) {
+      steps = [s0, s1, s2];
+      errorIndex = null;
+      injectedTag = null;
+    } else if (roll < 0.47) {
+      const v = mx(1, a * b * n - cc);
+      steps = [
+        step(over(`(x^{${a * b}})^{${n}}`), v),
+        step(over(`x^{${a * b * n}}`), v),
+        step(L.mono(v), v),
+      ];
+      errorIndex = 0;
+      injectedTag = "B3_PRODUCTE_EXPONENTS";
+    } else if (roll < 0.74) {
+      const v = mx(1, a + b + n - cc);
+      steps = [s0, step(over(L.expo("x", a + b + n)), v), step(L.mono(v), v)];
+      errorIndex = 1;
+      injectedTag = "B3_POTENCIA_POTENCIA";
+    } else {
+      const v = mx(1, Q.of((a + b) * n, cc));
+      steps = [s0, s1, step(L.mono(v), v)];
+      errorIndex = 2;
+      injectedTag = "B3_QUOCIENT_EXPONENTS";
+    }
+    const tx = T["B3.T10"];
+    return {
+      type: "find_error",
+      ...base(3, I.onEsError),
+      promptLatex: L.frac(`(${L.expo("x", a)} \\cdot ${L.expo("x", b)})^{${n}}`, L.expo("x", cc)),
+      promptMachine: monoMachine(prompt),
+      explanationCorrect: fill(
+        errorIndex === null ? tx.explicacioSenseError : tx.explicacioCorrecta,
+        {
+          a,
+          b,
+          n,
+          c: cc,
+          ab: a + b,
+          abn: (a + b) * n,
+          r: (a + b) * n - cc,
+        },
+      ),
+      steps,
+      errorIndex,
+      options: findErrorOptions(
+        steps,
+        errorIndex,
+        injectedTag,
+        (i) => ["B3_PRODUCTE_EXPONENTS", "B3_POTENCIA_POTENCIA", "B3_QUOCIENT_EXPONENTS"][i]!,
+      ),
+    };
+  },
+};
+
+export const B3_TEMPLATES: Template<Machine>[] = [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10];

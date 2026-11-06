@@ -72,4 +72,15 @@ export const B3_TEXTS = {
     explicacioSenseError:
       "Tots els passos són correctes: potència d'una potència (exponents multiplicats, número elevat), producte (exponents sumats) i quocient (exponents restats).",
   },
+  "B3.T9": {
+    explicacioCorrecta:
+      "Primer la potència de la potència: $([[k]]x^{[[a]]})^{[[n]]} = [[kn]]x^{[[an]]}$ (el $[[k]]$ també s'eleva, i els exponents es multipliquen). La $x^{[[j]]}$ encara no s'ha tocat.",
+  },
+  "B3.T10": {
+    enunciat: "Simplifica $\\frac{(x^{[[a]]} \\cdot x^{[[b]]})^{[[n]]}}{x^{[[c]]}}$",
+    explicacioCorrecta:
+      "Dins del parèntesi, producte: $x^{[[a]]} \\cdot x^{[[b]]} = x^{[[ab]]}$. Potència de potència: $(x^{[[ab]]})^{[[n]]} = x^{[[abn]]}$. Quocient: $x^{[[abn]] - [[c]]} = x^{[[r]]}$.",
+    explicacioSenseError:
+      "Tots els passos són correctes: sumar exponents al producte, multiplicar-los a la potència de potència i restar-los al quocient.",
+  },
 } as const;

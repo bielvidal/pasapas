@@ -3,5 +3,5 @@ import { B1_TEMPLATES } from "./templates";
 
 describeBlock("B1", B1_TEMPLATES, {
   validStep: ["B1.T5"],
-  findError: { "B1.T6": ["0", "1", "null"] },
+  findError: { "B1.T6": ["0", "1", "null"], "B1.T8": ["0", "null"] },
 });

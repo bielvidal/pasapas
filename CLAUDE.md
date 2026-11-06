@@ -56,7 +56,7 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
 - `packages/content-algebra` — `src/math/` (racionals BigInt, polinomis, funcions racionals,
   monomis amb exponents racionals `Mono`, `solve.ts` (arrels racionals i conjunts solució exactes),
   `fmt` LaTeX), `src/machine.ts` (formes màquina: `rf`, `mono`, `sqrtpoly`, `eq`, `radeq`, `sol`,
-  `claim`), `src/blocks/B{1..7}/templates.ts` (48 plantilles; `common.ts` utilitats, `blockTests.ts`
+  `claim`), `src/blocks/B{1..7}/templates.ts` (59 plantilles; `common.ts` utilitats, `blockTests.ts`
   tests compartits), `src/verify.ts` (verificació **exacta** amb `machineEquals`: cap tolerància;
   equacions = mateix conjunt de solucions), `texts/ca/` (textos per bloc + `comu.ts`).
   `CONTENT_VERSION` a `src/index.ts`: pujar-la quan canviï qualsevol plantilla o text.
@@ -117,8 +117,9 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
 Fase 1 (prototip) construïda i desplegada el 2026-11-05 a `https://pasapas.nereidlabs.net` (unit
 `pasapas-web`, hostname al túnel); validada per Biel i l'alumna. Fase 2 construïda la mateixa nit:
 API + login + administració + sincronització + pell de PPER (compose aixecat, smoke end-to-end i
-còpia verificada). Fase 3 (2026-11-06): els 7 blocs complets
-(48 plantilles, 197 tests de contingut). Pendent de Biel: revisar els textos nous, D21 (B5.T3) i les
-desviacions del catàleg (REGISTRO S3), i publicar (`sudo systemctl restart pasapas-web`). Fase 4:
-panell ampliat i `content_overrides`; més `next_step` i un segon `find_error` per bloc.
+còpia verificada). Fase 3 (2026-11-06): els 7 blocs complets.
+Fase 4 (2026-11-06): edició de textos sense desplegar (`content_overrides`, pestanya Textos a
+Administració; `texts/ca/overrides.ts` + `apps/web/lib/overrides.ts`), panell ampliat i 11 plantilles
+més (59 en total). Pendent de Biel: publicar (`sudo systemctl restart pasapas-web`), revisar textos
+des de l'app i D22. Fase 5 (després del 21/11): avaluar motor compartit amb PPER.
 Diari de sessions a `docs/REGISTRO.md`.
