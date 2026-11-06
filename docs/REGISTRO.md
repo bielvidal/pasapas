@@ -135,7 +135,7 @@ sin errores, 247 TS en total.
   `B4.T2b` (nivel 2, a ∈ [2..4]).
 - B4.T5: el error `B4_FACTOR_COMU_INCOMPLET` (`g·x(x² − g·k²)`) solo continúa de forma coherente si
   `g·k²` es cuadrado, así que en esa variante g = 4 y el paso siguiente es `4x(x + 2k)(x − 2k)`.
-- B5.T3 se deja como en el catálogo (distractor `x² − s·k`); decisión pendiente de Biel (D21).
+- B5.T3 se deja como en el catálogo (distractor `x² − s·k`): **decidido por Biel** (D21, acuerdo).
 - B6.T5 y B7.T3 (`valid_step` de ecuaciones) se generalizan con parámetros como pide el catálogo y
   se vuelve a sortear si la variante «inválida» resultara equivalente (lo exige el verificador).
 - B7.T5 (`next_step` de `√(x+a) = x−b`): la forma máquina del enunciado es la ecuación ya elevada
