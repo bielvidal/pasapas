@@ -190,6 +190,30 @@ Petición de Biel tras publicar la 0.4.0.
 
 **Pendiente de Biel:** `sudo systemctl restart pasapas-web`.
 
+## S6 · 2026-11-06 · «Proposats per a tu»
+
+Biel pregunta si se puede saber qué errores comete para proponerle ejercicios personales (como las
+«recetas por debilidades» de Aula). Opinión dada (Aula es un modelo de profesor que asigna deberes
+con fecha límite; aquí basta una ronda automática, sin fechas por los principios §2) y aceptada.
+
+- Ya se registraba el `error_tag` de cada elección y los tags presentados; el estado por tag
+  (actiu/superat) y Leitner ya existían.
+- Nuevo `planProposedRound` en el motor (`proposals.ts`): 1) errores a reforzar = elegidos ≥ 2 veces
+  en 28 días, o activos y elegidos alguna vez en la ventana (un error aislado no es una confusión);
+  se presentan con plantillas que los tienen como distractor (semilla nueva); 2) la celda más floja
+  del mapa de calor (≥ 3 intentos, < 70 %); 3) hasta 2 tarjetas Leitner pendientes; 4) un error
+  superado recientemente, para confirmarlo. Sin datos, ronda vacía con mensaje amable.
+- Índice tag → plantillas precalculado (`tagIndex.generated.ts`, `npm run gen:tags`, test de
+  coincidencia): calcularlo en el móvil costaba ~0,25 s en Node.
+- Web: botón «Proposats per a tu» en Inici (si hay intentos), pantalla que explica por qué se propone
+  cada cosa, etiquetas «Per reforçar» / «Comprovació» en la ronda y resumen «Hem treballat» con «Ja no
+  t'ha passat» / «Encara t'ha passat alguna vegada». Modo de sesión `proposats` en la API (0.3.1,
+  redesplegada). Web 0.6.0. Tests: motor 45, contenido 241.
+- Pendiente para más adelante (acordado): que el tutor «fije» un bloque o un error desde
+  Administració para la ronda propuesta.
+
+**Pendiente de Biel:** `sudo systemctl restart pasapas-web`.
+
 **Pendiente histórico de S1:**
 
 1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).

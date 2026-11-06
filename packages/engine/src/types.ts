@@ -123,7 +123,7 @@ export interface Attempt {
   contentVersion: string;
 }
 
-export type SessionMode = "apren" | "practica" | "repas";
+export type SessionMode = "apren" | "practica" | "repas" | "proposats";
 
 export interface Session {
   id: string;

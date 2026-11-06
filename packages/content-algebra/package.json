@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen:tags": "PASAPAS_GEN_TAGS=1 vitest run src/tagIndex.test.ts -t precalculat && prettier --write src/tagIndex.generated.ts"
   },
   "dependencies": {
     "@pasapas/engine": "*"

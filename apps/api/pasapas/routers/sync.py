@@ -41,7 +41,7 @@ class AttemptIn(BaseModel):
 
 class SessionIn(BaseModel):
     id: str = Field(min_length=8, max_length=UUID_LEN)
-    mode: Literal["apren", "practica", "repas"]
+    mode: Literal["apren", "practica", "repas", "proposats"]
     block: str | None = Field(default=None, max_length=10)
     startedAt: datetime
     endedAt: datetime | None = None

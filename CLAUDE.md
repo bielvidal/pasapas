@@ -53,7 +53,8 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
   (`buildItem`: regenera amb llavor derivada si dues opcions coincideixen, màx. 20; `grade`),
   `mastery.ts` (domini per bloc: últims 12 intents; per tag: 4 últimes presentacions), `leitner.ts`
   (caixes per `(template, error_tag)`, 1/3/7/14 dies), `selection.ts` (ronda 70/20/10, o nivell fix
-  i filtre per tipus), `heatmap.ts` (mapa de calor blocs × nivells/tipus, vista recent/històrica).
+  i filtre per tipus), `heatmap.ts` (mapa de calor blocs × nivells/tipus, vista recent/històrica),
+  `proposals.ts` («Proposats per a tu»: errors a reforçar, cel·la fluixa, Leitner, confirmació).
 - `packages/content-algebra` — `src/math/` (racionals BigInt, polinomis, funcions racionals,
   monomis amb exponents racionals `Mono`, `solve.ts` (arrels racionals i conjunts solució exactes),
   `fmt` LaTeX), `src/machine.ts` (formes màquina: `rf`, `mono`, `sqrtpoly`, `eq`, `radeq`, `sol`,
@@ -111,7 +112,8 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
    `monoMachine`/`eqMachine`/`solMachine`, `optText` per a claims; a `find_error`, `findErrorOptions`.
    Si una variant «invàlida» pot ser equivalent per a alguns paràmetres, torna a sortejar dins de
    `generate` (B6.T5, B7.T3). Els passos d'un `find_error` no poden mostrar-se iguals.
-5. `npm run check`. Pujar `CONTENT_VERSION`.
+5. `npm run gen:tags` (índex tag → plantilles de «Proposats per a tu»; un test avisa si cal), `npm run check`.
+   Pujar `CONTENT_VERSION`.
 
 ## Estat
 

@@ -23,11 +23,14 @@ export function Ronda({
   mode,
   block,
   onAgain,
+  focusTags = [],
 }: {
   items: RoundItem[];
-  mode: "practica" | "repas";
+  mode: "practica" | "repas" | "proposats";
   block: string | null;
   onAgain: () => void;
+  /** «Proposats per a tu»: errors treballats, per al resum. */
+  focusTags?: string[];
 }) {
   const sessionId = useMemo(() => uuid(), []);
   const [index, setIndex] = useState(0);
@@ -91,7 +94,8 @@ export function Ronda({
     setSaidValid(null);
   };
 
-  if (phase === "done" || !current) return <Resum attempts={attempts} onAgain={onAgain} />;
+  if (phase === "done" || !current)
+    return <Resum attempts={attempts} onAgain={onAgain} focusTags={focusTags} />;
 
   const { item, plan } = current;
   const answered = phase === "answered";
@@ -117,6 +121,16 @@ export function Ronda({
           )}
           {plan.slot === "next" && (
             <span className="rounded-full bg-paper2 px-2 py-0.5">{UI.pregunta.nouNivell}</span>
+          )}
+          {plan.slot === "reinforce" && (
+            <span className="rounded-full bg-amberSoft px-2 py-0.5 text-amber">
+              {UI.pregunta.reforc}
+            </span>
+          )}
+          {plan.slot === "confirm" && (
+            <span className="rounded-full bg-okSoft px-2 py-0.5 text-ok">
+              {UI.pregunta.confirmacio}
+            </span>
           )}
         </span>
       </div>
@@ -254,8 +268,19 @@ export function Ronda({
   );
 }
 
-function Resum({ attempts, onAgain }: { attempts: Attempt[]; onAgain: () => void }) {
+function Resum({
+  attempts,
+  onAgain,
+  focusTags,
+}: {
+  attempts: Attempt[];
+  onAgain: () => void;
+  focusTags: string[];
+}) {
   const s = summarizeRound(attempts);
+  const P = UI.proposats;
+  // Errors treballats: només els que s'han presentat de debò en aquesta ronda.
+  const worked = focusTags.filter((t) => attempts.some((a) => a.presentedErrorTags.includes(t)));
   return (
     <div className="flex flex-col gap-5 animate-fadeUp">
       <h1 className="font-display text-2xl font-semibold">{UI.final.titol}</h1>
@@ -263,6 +288,26 @@ function Resum({ attempts, onAgain }: { attempts: Attempt[]; onAgain: () => void
         {UI.final.resum(s.correct, s.total)}
         {s.skipped > 0 && <span className="text-soft"> · {UI.final.saltades(s.skipped)}</span>}
       </p>
+      {worked.length > 0 && (
+        <section className="card">
+          <h2 className="font-semibold">{P.hemTreballat}</h2>
+          <ul className="mt-2 space-y-1">
+            {worked.map((t) => {
+              const again = attempts.some((a) => a.errorTag === t);
+              return (
+                <li key={t} className="flex flex-wrap items-center gap-2">
+                  <MixedText text={tagName(t)} />
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-semibold ${again ? "bg-amberSoft text-amber" : "bg-okSoft text-ok"}`}
+                  >
+                    {again ? P.encaraEtPassa : P.jaNoEtPassa}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
       {s.avoided.length > 0 && (
         <section className="rounded-2xl bg-okSoft p-5">
           <h2 className="font-semibold text-ok">{UI.final.jaNoEtPassa}</h2>

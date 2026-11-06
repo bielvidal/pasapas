@@ -33,7 +33,7 @@ class TZDateTime(TypeDecorator):
 
 JSONType = JSON().with_variant(JSONB(), "postgresql")
 ROLES = ("tutor", "student")
-MODES = ("apren", "practica", "repas")
+MODES = ("apren", "practica", "repas", "proposats")
 OUTCOMES = ("correct", "incorrect", "skipped")
 QUESTION_TYPES = ("mc_result", "valid_step", "find_error", "next_step")
 

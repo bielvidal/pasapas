@@ -1,5 +1,5 @@
 // @pasapas/content-algebra — plantilles, textos i verificació.
-import type { Template } from "@pasapas/engine";
+import { buildItem, presentedErrorTags, type Template } from "@pasapas/engine";
 import { B1_TEMPLATES } from "./blocks/B1/templates";
 import { B2_TEMPLATES } from "./blocks/B2/templates";
 import { B3_TEMPLATES } from "./blocks/B3/templates";
@@ -8,6 +8,7 @@ import { B5_TEMPLATES } from "./blocks/B5/templates";
 import { B6_TEMPLATES } from "./blocks/B6/templates";
 import { B7_TEMPLATES } from "./blocks/B7/templates";
 import type { Machine } from "./machine";
+import { TAG_TEMPLATE_INDEX } from "./tagIndex.generated";
 
 export type { Machine, AlgOption } from "./machine";
 export { verifyItem, machineEquals } from "./verify";
@@ -43,3 +44,28 @@ export const templatesOfBlock = (block: string): Template<Machine>[] =>
 
 /** Blocs que tenen almenys una plantilla. */
 export const availableBlocks = (): string[] => [...new Set(ALL_TEMPLATES.map((t) => t.block))];
+
+/**
+ * Índex error_tag → plantilles que el presenten com a distractor (per a «Proposats per a tu»).
+ * `computeTagTemplateIndex` el calcula generant ítems de cada plantilla (les variants de
+ * valid_step i find_error presenten tags diferents segons la llavor); com que triga, la web fa
+ * servir la versió precalculada `TAG_TEMPLATE_INDEX` (`npm run gen:tags`; un test comprova que
+ * coincideixen).
+ */
+export function computeTagTemplateIndex(seeds = 40): Record<string, string[]> {
+  const idx: Record<string, Set<string>> = {};
+  for (const t of ALL_TEMPLATES) {
+    for (let seed = 1; seed <= seeds; seed++) {
+      for (const tag of presentedErrorTags(buildItem(t, seed))) (idx[tag] ??= new Set()).add(t.id);
+    }
+  }
+  return Object.fromEntries(
+    Object.keys(idx)
+      .sort()
+      .map((k) => [k, [...idx[k]!].sort()]),
+  );
+}
+
+export { TAG_TEMPLATE_INDEX };
+export const tagTemplateIndex = (): Readonly<Record<string, readonly string[]>> =>
+  TAG_TEMPLATE_INDEX;

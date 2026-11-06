@@ -178,6 +178,8 @@ export const UI = {
     quinPasFalla: "Toca el pas que falla",
     repas: "Repàs",
     nouNivell: "Nivell següent",
+    reforc: "Per reforçar",
+    confirmacio: "Comprovació",
   },
   final: {
     titol: "Ronda acabada",
@@ -188,6 +190,21 @@ export const UI = {
     unaAltra: "Una altra ronda",
     inici: "Tornar a l'inici",
     saltades: (n: number) => (n === 1 ? "1 pregunta saltada" : `${n} preguntes saltades`),
+  },
+  proposats: {
+    titol: "Proposats per a tu",
+    boto: "Proposats per a tu",
+    botoSub: "Una ronda feta amb el que et convé reforçar",
+    intro: "Aquesta ronda l'ha preparat l'app amb les teves respostes:",
+    reforcar: (n: number) =>
+      n === 1 ? "l'error que més et passa" : `els ${n} errors que més et passen`,
+    cella: (b: string, l: number) => `el nivell ${l} de ${b}, que encara costa una mica`,
+    repas: (n: number) => (n === 1 ? "1 repàs que tocava avui" : `${n} repassos que tocaven avui`),
+    confirmar: "un error que ja havies superat, per confirmar-ho",
+    buit: "Encara no hi ha prou respostes per proposar-te res. Fes alguna ronda d'un bloc i torna!",
+    hemTreballat: "Hem treballat",
+    jaNoEtPassa: "Ja no t'ha passat",
+    encaraEtPassa: "Encara t'ha passat alguna vegada",
   },
   repas: {
     titol: "Repassa els meus errors",

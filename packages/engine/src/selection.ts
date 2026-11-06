@@ -3,7 +3,8 @@ import { currentLevel } from "./mastery";
 import type { Rng } from "./rng";
 import type { Attempt, Level, QuestionType, Template } from "./types";
 
-export type Slot = "current" | "next" | "review";
+/** current/next/review: ronda de bloc; reinforce/confirm: «Proposats per a tu». */
+export type Slot = "current" | "next" | "review" | "reinforce" | "confirm";
 
 export interface PlannedItem {
   templateId: string;

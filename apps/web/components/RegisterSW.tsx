@@ -14,6 +14,7 @@ export function RegisterSW() {
           [
             "/",
             "/repas",
+            "/proposats",
             "/progres",
             "/compte",
             ...BLOCS.filter((b) => b.disponible).flatMap((b) => [

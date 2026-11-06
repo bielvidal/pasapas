@@ -15,3 +15,4 @@ export * from "./mastery";
 export * from "./leitner";
 export * from "./selection";
 export * from "./heatmap";
+export * from "./proposals";

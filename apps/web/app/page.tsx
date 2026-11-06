@@ -27,6 +27,22 @@ export default function Inici() {
           <span className="text-sm font-normal opacity-90">{UI.inici.repassaN(due)}</span>
         </Link>
       )}
+      {attempts.length > 0 && (
+        <Link
+          href="/proposats"
+          className="card flex items-center justify-between gap-3 border-teal transition hover:bg-tealSoft"
+        >
+          <span>
+            <span className="block font-display text-lg font-semibold text-teal">
+              {UI.proposats.boto}
+            </span>
+            <span className="text-sm text-soft">{UI.proposats.botoSub}</span>
+          </span>
+          <span className="text-2xl text-teal" aria-hidden>
+            →
+          </span>
+        </Link>
+      )}
       <SectionTitle>{UI.inici.blocs}</SectionTitle>
       <div className="-mt-2 flex flex-col gap-3">
         {BLOCS.map((b) => (
