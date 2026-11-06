@@ -135,6 +135,25 @@ export const UI = {
     ho_vaig_agafant: "Ho vaig agafant",
     dominat: "Dominat",
   } as Record<string, string>,
+  dificultat: {
+    titol: "Dificultat",
+    auto: "Automàtica",
+    autoDesc: "Comença pel nivell que toca i va pujant quan el domines.",
+    nivells: {
+      1: "Nivell 1 · un pas",
+      2: "Nivell 2 · uns quants passos",
+      3: "Nivell 3 · resolucions completes",
+    } as Record<number, string>,
+    curt: { auto: "Auto", 1: "Nivell 1", 2: "Nivell 2", 3: "Nivell 3" } as Record<string, string>,
+    ara: (l: string) => `Ara: ${l}`,
+    tipus: (t: string) => `Només: ${t}`,
+  },
+  tipus: {
+    mc_result: "Resultat",
+    next_step: "Pas següent",
+    valid_step: "És vàlid?",
+    find_error: "On és l'error?",
+  } as Record<string, string>,
   apren: {
     reglaOr: "Regla d'or",
     exemples: "Exemples",
@@ -194,6 +213,22 @@ export const UI = {
     nivellActual: "nivell actual",
     totsElsBlocs: "Tots els blocs",
     ultimCop: "últim cop",
+    mapa: "Mapa de calor",
+    mapaRecent: "Estat recent",
+    mapaHistoric: "Històric",
+    mapaPerNivell: "Per nivell",
+    mapaPerTipus: "Per tipus de pregunta",
+    mapaAjudaRecent:
+      "Estat recent: cada plantilla compta sobretot pels últims intents (l'últim pesa la meitat, l'anterior un quart…). Els errors del principi es van diluint a mesura que encertes.",
+    mapaAjudaHistoric: "Històric: encerts sobre el total d'intents des del principi.",
+    mapaAjuda:
+      "Sota cada percentatge, intents fets. Toca una cel·la per practicar justament això. Gris: encara sense dades.",
+    total: "Total",
+    llegenda: ["≥ 85 %", "70-84 %", "50-69 %", "< 50 %", "sense dades"],
+    perReforcar: "Per reforçar",
+    perReforcarBuit:
+      "Encara no hi ha cap cel·la amb 3 intents o més per sota del 70 %. Bona feina!",
+    practicar: "practicar",
     superatsRecent: "Superats en aquestes setmanes",
     capSuperat: "Encara cap; a mesura que els errors deixin de passar, apareixeran aquí.",
     mesFrequents: "Els que més es repeteixen",

@@ -1,7 +1,7 @@
 import { dueReviews, reviewState } from "./leitner";
 import { currentLevel } from "./mastery";
 import type { Rng } from "./rng";
-import type { Attempt, Level, Template } from "./types";
+import type { Attempt, Level, QuestionType, Template } from "./types";
 
 export type Slot = "current" | "next" | "review";
 
@@ -20,6 +20,20 @@ export interface PlanOptions {
   rng: Rng;
   now?: Date;
   size?: number;
+  /**
+   * Dificultat: "auto" (per defecte) s'adapta al domini; un nivell fix fa que tota la ronda (llevat
+   * del repàs) sigui d'aquell nivell. Si el nivell no té plantilles, s'agafa el més proper.
+   */
+  level?: Level | "auto";
+  /** Restringeix a uns tipus de pregunta (p. ex. des del mapa de calor). */
+  types?: readonly QuestionType[];
+}
+
+/** Nivell amb plantilles més proper al demanat (empat: el més fàcil). */
+function nearestLevel(pool: readonly Template[], level: Level): Level | null {
+  const levels = [...new Set(pool.map((t) => t.level))];
+  if (!levels.length) return null;
+  return levels.sort((a, b) => Math.abs(a - level) - Math.abs(b - level) || a - b)[0]!;
 }
 
 /** Tria una plantilla de la llista evitant repetir la immediatament anterior si es pot. */
@@ -30,20 +44,27 @@ function pickTemplate(rng: Rng, pool: readonly Template[], previous: string | nu
 
 /**
  * Ronda de «Practica» (§5.6): 10 ítems del bloc, 70 % del nivell actual, 20 % del següent,
- * 10 % de repàs (targetes de Leitner pendents del bloc). Cada ítem porta la seva llavor:
+ * 10 % de repàs (targetes de Leitner pendents del bloc). Amb `level` fix: 90 % d'aquell nivell i
+ * 10 % de repàs. Cada ítem porta la seva llavor:
  * la ronda és reproduïble a partir del rng.
  */
 export function planRound(opts: PlanOptions): PlannedItem[] {
   const { templates, attempts, block, rng } = opts;
   const now = opts.now ?? new Date();
   const size = opts.size ?? 10;
-  const inBlock = templates.filter((t) => t.block === block);
+  const inBlock = templates.filter(
+    (t) => t.block === block && (!opts.types || opts.types.includes(t.type)),
+  );
   if (inBlock.length === 0) return [];
 
-  const level = currentLevel(attempts, block);
+  const fixed = opts.level !== undefined && opts.level !== "auto";
+  const level = fixed
+    ? (nearestLevel(inBlock, opts.level as Level) ?? (opts.level as Level))
+    : currentLevel(attempts, block);
   const nextLevel = Math.min(3, level + 1) as Level;
   const atLevel = inBlock.filter((t) => t.level === level);
-  const atNext = nextLevel !== level ? inBlock.filter((t) => t.level === nextLevel) : [];
+  // Amb un nivell fix no hi ha «nivell següent»: la ronda és tota d'aquell nivell.
+  const atNext = !fixed && nextLevel !== level ? inBlock.filter((t) => t.level === nextLevel) : [];
   // Si el nivell actual no té plantilles (contingut incomplet), s'agafa qualsevol del bloc.
   const currentPool = atLevel.length ? atLevel : inBlock;
 

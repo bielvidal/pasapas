@@ -20,6 +20,11 @@ export const LIGHT = {
   okSoft: "#DDF1E4",
   danger: "#B3261E",
   dangerSoft: "#F9DEDC",
+  heat0: "#EEF2F3",
+  heat1: "#BFE3CB",
+  heat2: "#D3E8EC",
+  heat3: "#FCEBB8",
+  heat4: "#F5CF94",
 } as const;
 
 export const DARK: Record<keyof typeof LIGHT, string> = {
@@ -39,6 +44,11 @@ export const DARK: Record<keyof typeof LIGHT, string> = {
   okSoft: "#163A27",
   danger: "#F2A49C",
   dangerSoft: "#4A1C19",
+  heat0: "#1C2225",
+  heat1: "#1E5136",
+  heat2: "#1B4249",
+  heat3: "#4E3D10",
+  heat4: "#663C12",
 };
 
 export type Token = keyof typeof LIGHT;

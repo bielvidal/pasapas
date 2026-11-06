@@ -52,7 +52,8 @@ deploy/backup-db.sh         # pg_dump a ~/var/pasapas-backups (cron 04:30); veri
   `Math.random` prohibit per ESLint), `types.ts` (Template, Item, Option, Attempt…), `build.ts`
   (`buildItem`: regenera amb llavor derivada si dues opcions coincideixen, màx. 20; `grade`),
   `mastery.ts` (domini per bloc: últims 12 intents; per tag: 4 últimes presentacions), `leitner.ts`
-  (caixes per `(template, error_tag)`, 1/3/7/14 dies), `selection.ts` (ronda 70/20/10).
+  (caixes per `(template, error_tag)`, 1/3/7/14 dies), `selection.ts` (ronda 70/20/10, o nivell fix
+  i filtre per tipus), `heatmap.ts` (mapa de calor blocs × nivells/tipus, vista recent/històrica).
 - `packages/content-algebra` — `src/math/` (racionals BigInt, polinomis, funcions racionals,
   monomis amb exponents racionals `Mono`, `solve.ts` (arrels racionals i conjunts solució exactes),
   `fmt` LaTeX), `src/machine.ts` (formes màquina: `rf`, `mono`, `sqrtpoly`, `eq`, `radeq`, `sol`,

@@ -11,7 +11,9 @@ import {
   type Attempt,
   type Grade,
   type Item,
+  type Level,
   type PlannedItem,
+  type QuestionType,
   type Template,
 } from "@pasapas/engine";
 import { CONTENT_VERSION, type Machine } from "@pasapas/content-algebra";
@@ -29,8 +31,9 @@ export function buildPracticeRound(
   block: string,
   seed: number,
   now = new Date(),
+  choice: { level?: Level | "auto"; types?: QuestionType[] } = {},
 ): RoundItem[] {
-  const plan = planRound({ templates, attempts, block, rng: mulberry32(seed), now });
+  const plan = planRound({ templates, attempts, block, rng: mulberry32(seed), now, ...choice });
   return plan.map((p) => ({
     plan: p,
     item: buildItem(

@@ -170,6 +170,26 @@ decisiones cuando Biel las valide.
 **Pendiente de Biel:** `sudo systemctl restart pasapas-web`; revisar textos (ahora también desde la
 app) y D22. **Siguiente:** feedback de uso. La fase 5 (motor compartido con PPER) queda eliminada por decisión de Biel (D5).
 
+## S5 · 2026-11-06 · Selector de dificultad y mapa de calor
+
+Petición de Biel tras publicar la 0.4.0.
+
+- **Dificultad** (sin tocar el contenido: cada plantilla ya tenía nivel 1-3 y los 7 bloques tienen
+  los tres): `planRound` acepta `level` («auto» = 70/20/10 como antes; nivel fijo = 90 % de ese nivel
+  + 10 % de repaso, sin «nivel siguiente»; si un nivel no tiene plantillas, el más cercano) y
+  `types` (filtrar por tipo de pregunta). En la pantalla de cada bloque, selector «Automàtica / Nivell
+  1 · un pas / Nivell 2 · uns quants passos / Nivell 3 · resolucions completes», recordado por bloque
+  en el dispositivo (`lib/difficulty.ts`). `/practica/B?nivell=N&tipus=T` manda sobre la preferencia.
+- **Mapa de calor** en «El meu progrés» (calcado del de PPER, misma vista alumna/tutor): bloques ×
+  niveles o × tipos de pregunta, vista «estat recent» (por plantilla, el último intento pesa la mitad,
+  el anterior un cuarto…; media de plantillas) o «històric» (aciertos / intentos), número de intentos
+  bajo cada %, cada celda lleva a practicar justo eso, leyenda ≥85 / 70-84 / 50-69 / <50 / sin datos
+  con colores suaves (sin rojo, §8), y «Per reforçar» (celdas con ≥ 3 intentos y < 70 %). Cálculo en
+  el motor (`packages/engine/src/heatmap.ts`), agnóstico del dominio.
+- Tests: 7 nuevos en el motor (40). Web 0.5.0 (contenido sin cambios, 0.3.0).
+
+**Pendiente de Biel:** `sudo systemctl restart pasapas-web`.
+
 **Pendiente histórico de S1:**
 
 1. ~~Biel prueba la app en el móvil~~ hecho (2026-11-05).

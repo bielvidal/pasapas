@@ -13,6 +13,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { Loading, Notice, Pill, SectionTitle } from "@/components/Frame";
+import { Heatmap } from "@/components/Heatmap";
 import { MixedText } from "@/components/Math";
 import { Sparkline } from "@/components/Sparkline";
 import { api, type UserRow } from "@/lib/api";
@@ -199,6 +200,8 @@ function Panels({ attempts }: { attempts: Attempt[] }) {
           ))}
         </div>
       </section>
+
+      <Heatmap attempts={attempts} />
 
       <section>
         <SectionTitle>{UI.progres.blocs}</SectionTitle>

@@ -1,15 +1,18 @@
 "use client";
+import type { Level } from "@pasapas/engine";
 import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
+import { DifficultySelector } from "@/components/DifficultySelector";
 import { SectionTitle } from "@/components/Frame";
 import { Math, MixedText } from "@/components/Math";
-import { blocById } from "@/lib/content";
+import { blocById, templatesOfBlock } from "@/lib/content";
 import { UI } from "@/lib/texts";
 
 export default function Apren() {
   const { id } = useParams<{ id: string }>();
   const bloc = blocById(id);
   if (!bloc || !bloc.disponible) notFound();
+  const levels = [...new Set(templatesOfBlock(id).map((t) => t.level))].sort() as Level[];
   return (
     <div className="flex flex-col gap-5 animate-fadeUp">
       <div>
@@ -33,6 +36,7 @@ export default function Apren() {
           ))}
         </ol>
       </section>
+      <DifficultySelector block={bloc.id} levels={levels} />
       <Link href={`/practica/${bloc.id}`} className="btn py-4 text-lg">
         {UI.apren.comenca}
       </Link>
