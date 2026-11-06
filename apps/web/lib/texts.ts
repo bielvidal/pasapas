@@ -183,7 +183,21 @@ export const UI = {
     jo: "Jo",
     carregant: "Carregant els intents del servidor…",
     blocs: "Blocs",
-    setmanes: "Les últimes 8 setmanes",
+    finestra: "Finestra",
+    setmanesN: (n: number) => `${n} setmanes`,
+    resum: "En aquestes setmanes",
+    resumLinia: (n: number, ok: number, skipped: number) =>
+      n === 0
+        ? "Cap intent en aquestes setmanes."
+        : `${n} intents · ${ok} ben resolts${skipped ? ` · ${skipped} saltats` : ""}`,
+    nivell: (n: number) => `Nivell ${n}`,
+    nivellActual: "nivell actual",
+    totsElsBlocs: "Tots els blocs",
+    ultimCop: "últim cop",
+    superatsRecent: "Superats en aquestes setmanes",
+    capSuperat: "Encara cap; a mesura que els errors deixin de passar, apareixeran aquí.",
+    mesFrequents: "Els que més es repeteixen",
+    setmanes: "Setmana a setmana",
     errors: "Errors típics",
     errorsBuit: "Encara no hi ha dades. Fes una ronda!",
     actiu: "Actiu",
